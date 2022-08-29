@@ -17,6 +17,10 @@
 </head>
 <script>
 	$(document).ready(function(){
+		$("#home").toggleClass("selected");
+		$("#content").load("content/home.html");
+		
+	
 		$.caph.focus.activate(function(nearestFocusableFinderProvider, controllerProvider) {
 	        controllerProvider.onFocused(function(event, originalEvent) {
 	        	$(event.currentTarget).css({
@@ -36,6 +40,15 @@
 	 	    		$("#profile").removeClass("selected")
 	 	 		$(event.currentTarget).toggleClass("selected");
 	 	 		
+	 	 		if ($("#home").hasClass("selected")) {
+	 	 			$("#content").load("content/home.html");
+	 	 		}
+	 	 		if ($("#search").hasClass("selected")) {
+	 	 			$("#content").load("content/search.html");
+	 	 		}
+	 	 		if ($("#profile").hasClass("selected")) {
+	 	 			$("#content").load("content/profile.html");
+	 	 		}
 			});
 	    });	
 });
@@ -72,14 +85,28 @@
 			</div>
 		</div>
 	</div>
-	<div id="content" class="row">
-	
-	</div>
+	<div id="content" class="row container-fluid"></div>
 
-	<div class="row menu" style="height: 110px;">
-		<div id="home" focusable style="text-align: center; margin:0 auto;" class="nav-item col-lg-4"><div class="home"><a href=""></a></div></div>
-		<div id="search" focusable style="text-align: center;" class="nav-item col-lg-4"><div class="search"><a href=""></a></div></div>
-		<div id="profile" focusable style="text-align: center;" class="nav-item col-lg-4"><div class="profile"><a href=""></a></div></div>
-	</div>
+		<div class="row menu container-fluid" style="height: 110px;">
+			<div id="home" focusable style="text-align: center; margin: 0 auto;"
+				class="nav-item col-lg-4">
+				<div class="home">
+					<a href=""></a>
+				</div>
+			</div>
+			<div id="search" focusable style="text-align: center;"
+				class="nav-item col-lg-4">
+				<div class="search">
+					<a href=""></a>
+				</div>
+			</div>
+			<div id="profile" focusable style="text-align: center;"
+				class="nav-item col-lg-4">
+				<div class="profile">
+					<a href=""></a>
+				</div>
+			</div>
+		</div>
+	
 </body>
 </html>
