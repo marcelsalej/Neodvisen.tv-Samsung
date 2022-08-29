@@ -4,9 +4,11 @@
     <author email="bojan.kodelja@imc.si">IMC d.o.o</author>
     <content src="index.html"/>
     <feature name="http://tizen.org/feature/screen.size.normal.1080.1920"/>
+    <feature name="http://tizen.org/feature/screen.size.all"/>
     <icon src="1024.png"/>
-    <name>NeodvisenTV</name>
     <name xml:lang="sl-si">Neodvisen TV</name>
+    <name>NeodvisenTV</name>
+    <tizen:privilege name="http://developer.samsung.com/privilege/network.public"/>
     <tizen:profile name="tv-samsung"/>
     <tizen:setting screen-orientation="landscape" context-menu="enable" background-support="disable" encryption="disable" install-location="auto" hwkey-event="enable"/>
 </widget>

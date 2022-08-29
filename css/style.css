@@ -6,4 +6,37 @@ h1 {
     font-size:4.0em;margin:10px 0 20px 10px;color:#6587ac;
 }
 
+.top_bar {
+	background: #2d2c2d !important;
+	height: 100px;
+}
+
+.separator {
+	margin-top: 20px;
+	background: white;
+	width: 1px;
+	height: 50px;
+	margin-left: 15px;
+	margin-right: 15px;
+	opacity: 0.5;
+}
+
+.tv_image_logo {
+	margin-top: 24px;	
+}
+
+.company_image_logo {
+	margin-top: 24px;
+	opacity: 20%;	
+}
+
+.sponsor_text {
+	margin-top: 10px;
+	color: white;
+	opacity: 35%;
+	width: 110px;
+}
+
+
 .canvas { width:960px;height:auto;margin-left:450px;margin-right:450px;background:#fff;}
+
