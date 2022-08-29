@@ -1,9 +1,12 @@
 * {
     margin:0;padding:0
 }
+body {
+	background-color: black;
+}
 
 h1 {
-    font-size:4.0em;margin:10px 0 20px 10px;color:#6587ac;
+    font-size:4.0em;margin:10px 0 20px 10px;color: white;
 }
 
 .top_bar {
@@ -12,7 +15,7 @@ h1 {
 }
 
 .separator {
-	margin-top: 20px;
+	margin-top: 25px;
 	background: white;
 	width: 1px;
 	height: 50px;
@@ -22,16 +25,15 @@ h1 {
 }
 
 .tv_image_logo {
-	margin-top: 24px;	
+	margin-top: 30px;	
 }
 
 .company_image_logo {
-	margin-top: 24px;
-	opacity: 20%;	
+	margin-top: 30px;
 }
 
 .sponsor_text {
-	margin-top: 10px;
+	margin-top: 15px;
 	color: white;
 	opacity: 35%;
 	width: 110px;
@@ -40,3 +42,52 @@ h1 {
 
 .canvas { width:960px;height:auto;margin-left:450px;margin-right:450px;background:#fff;}
 
+.menu {
+	background-color: #2d2c2d;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.selected > .home {
+	background-image: url('../images/home_icon_selected.png');
+}
+
+.home {
+	background-image: url('../images/home_icon.png');
+	width: 50px;
+	margin-top: 20px;
+	height: 60px;
+	background-size: contain;
+	margin: 0 auto;
+	margin-top: 24px;
+}
+
+.selected > .search {
+	background-image: url('../images/search_icon_selected.png');
+}
+
+.search {
+	background-image: url('../images/search_icon.png');
+	background-size: contain;
+	margin-top: 50px;
+	width: 60px;
+	height: 60px;
+	margin: 0 auto;
+	margin-top: 24px;
+}
+
+.selected > .profile {
+	background-image: url('../images/person_icon_selected.png');
+}
+
+.profile {
+	background-image: url('../images/person_icon.png');
+	background-size: contain;
+	margin-top: 20px;
+	width: 60px;
+	height: 60px;
+	margin: 0 auto;
+	margin-top: 24px;
+}
