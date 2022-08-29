@@ -7,6 +7,7 @@
 <meta name="description" content="Canvas Clock - Canvas API Tutorial" />
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
+<link href="css/authentication/auth.css" rel="stylesheet">
 <title>Canvas Clock - Canvas API Tutorial</title>
 <script src="js/main.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -14,30 +15,65 @@
 </head>
 
 <body>
-	<div class="top_bar container-fluid" style="display: inline-flex;">
-		<div class="row" style="width: 100%">
-			<div class="col-lg-1"></div>
-			<div class="col-lg-3">
-				<div style="display: flex;">
-					<img src="images/neodvisen_tv_logo.png" class="tv_image_logo"
-						width="198" height="44" />
-					<div class="separator"></div>
-					<img src="images/neodvisen_logo.png" class="company_image_logo"
-						width="198" height="44" />
-				</div>
+	<div class="background-overlay"></div>
+	<div class="overlay-items">
+		<div class="top_bar container-fluid" style="display: inline-flex;">
+			<div class="row" style="width: 100%">
+				<div class="col-lg-1"></div>
+				<div class="col-lg-3">
+					<div style="display: flex;">
+						<img src="images/neodvisen_tv_logo.png" class="tv_image_logo"
+							width="198" height="44" />
+						<div class="separator"></div>
+						<img src="images/neodvisen_logo.png" class="company_image_logo"
+							width="198" height="44" />
+					</div>
 
-			</div>
-			<div class="col-lg-4"></div>
-			<div class="col-lg-3">
-				<div style="display: flex;">
-					<span class="sponsor_text">Ogled spletne televizije vam omogoča</span>
-					<div class="separator"></div>
-					<img src="images/neodvisen_logo.png" class="company_image_logo"
-						width="198" height="44" />
+				</div>
+				<div class="col-lg-4"></div>
+				<div class="col-lg-3">
+					<div style="display: flex;">
+						<span class="sponsor_text">Ogled spletne televizije vam
+							omogoča</span>
+						<div class="separator"></div>
+						<img src="images/neodvisen_logo.png" class="company_image_logo"
+							width="198" height="44" />
+					</div>
+				</div>
+				<div class="col-lg-1">
+					<p></p>
 				</div>
 			</div>
-			<div class="col-lg-1">
-				<p></p>
+
+		</div>
+		<div class="auth-container" style="width:100%">
+			<div class="row" style="width: 100%">
+				<div class="col-4">
+					<img src="images/auth-banner.png" style="width: 256px" />
+				</div>
+			</div>
+			<div class="row" style="width: 100%">
+				<div class="col-4">
+					<hr>
+				</div>
+			</div>
+			<div class="row" style="width: 100%">
+				<div class="col-4">
+
+					<p>Za ogled potrebujete aktivacijsko kodo</p>
+				</div>
+			</div>
+			<div class="row mt-5" style="width: 100%">
+				<div class="col-4">
+					<div class="row">
+						<div class="col-6" style="width: 100%">
+							<p class="text-white">Aktivacijska koda:</p>
+						</div>
+						<div class="col-6" style="width: 100%">
+							<a class="text-warning">pridobi kodo</a>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -1,0 +1,28 @@
+.background-overlay {
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: fixed;
+	background-color: black;
+	opacity: 90%;
+	z-index: 1;
+}
+
+.overlay-items {
+	z-index: 2;
+}
+
+.overlay-items * {
+	z-index: 2;
+}
+
+
+.auth-container {
+	
+}
+
+.auth-container > * {
+	align-items: center;
+} 
