@@ -18,6 +18,14 @@
 	z-index: 2;
 }
 
+.red-bg {
+	background-color: #ed1b24;
+}
+
+.red-text {
+	color: #ed1b24;
+}
+
 
 .auth-container {
 	
@@ -26,3 +34,9 @@
 .auth-container > * {
 	align-items: center;
 } 
+
+.pin-digit {
+	height: 82px;
+	background-color: #666666;
+	width: 100%;
+}
