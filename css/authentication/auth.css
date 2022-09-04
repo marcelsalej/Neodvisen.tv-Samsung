@@ -26,6 +26,13 @@
 	color: #f00404;
 }
 
+.color-gray-light{
+	color: #797679;
+}
+
+.color-gray-default {
+	color: #2d2c2d;
+}
 
 .auth-container {
 	
@@ -36,8 +43,10 @@
 } 
 
 .pin-digit {
-	height: 82px;
-	background-color: #666666;
+	height: 100px;
+	background-color: #2d2c2d;
+	border-radius: 8px;
+	border: 2px solid #aaaaaa;
 }
 .pin-digit-container > * {
 	width:100%; /* assuming there is only input */
