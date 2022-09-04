@@ -47,6 +47,7 @@
 	font-weight: 600;
 	border-radius: 42px;
 	padding: 14px 84px;
+	border: none;
 }
 
 .auth-container > * {
