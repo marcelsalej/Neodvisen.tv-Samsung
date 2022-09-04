@@ -38,6 +38,17 @@
 	
 }
 
+.rounded-corners {
+	border-radius: 8px;
+}
+
+.button-prefab {
+	font-size: 1.5rem;
+	font-weight: 600;
+	border-radius: 42px;
+	padding: 14px 84px;
+}
+
 .auth-container > * {
 	align-items: center;
 } 
