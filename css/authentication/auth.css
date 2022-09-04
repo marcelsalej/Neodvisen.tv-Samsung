@@ -1,0 +1,65 @@
+.background-overlay {
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: fixed;
+	background-color: black;
+	opacity: 90%;
+	z-index: 1;
+}
+
+.overlay-items {
+	z-index: 2;
+}
+
+.overlay-items * {
+	z-index: 2;
+}
+
+.red-bg {
+	background-color: #f00404;
+}
+
+.red-text {
+	color: #f00404;
+}
+
+.color-gray-light{
+	color: #797679;
+}
+
+.color-gray-default {
+	color: #2d2c2d;
+}
+
+.auth-container {
+	
+}
+
+.rounded-corners {
+	border-radius: 8px;
+}
+
+.button-prefab {
+	font-size: 1.5rem;
+	font-weight: 600;
+	border-radius: 42px;
+	padding: 14px 84px;
+	border: none;
+}
+
+.auth-container > * {
+	align-items: center;
+} 
+
+.pin-digit {
+	height: 100px;
+	background-color: #2d2c2d;
+	border-radius: 8px;
+	border: 2px solid #aaaaaa;
+}
+.pin-digit-container > * {
+	width:100%; /* assuming there is only input */
+}
