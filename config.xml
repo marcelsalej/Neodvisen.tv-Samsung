@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns:tizen="http://tizen.org/ns/widgets" xmlns="http://www.w3.org/ns/widgets" id="http://yourdomain/NeodvisenTV" version="1.0.0" viewmodes="maximized">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://yourdomain/NeodvisenTV" version="1.0.0" viewmodes="maximized">
     <tizen:application id="RiqEJLBMhY.NeodvisenTV" package="RiqEJLBMhY" required_version="2.1"/>
     <author email="bojan.kodelja@imc.si">IMC d.o.o</author>
-    <content src="index.html"/>
+    <content src="link.html"/>
     <feature name="http://tizen.org/feature/screen.size.normal.1080.1920"/>
     <feature name="http://tizen.org/feature/screen.size.all"/>
     <icon src="1024.png"/>
