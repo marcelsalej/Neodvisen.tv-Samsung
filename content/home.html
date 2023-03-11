@@ -1,0 +1,86 @@
+<div class="row">
+	<div id="bigSlider"></div>
+	<div id="categories" style="margin-top: 2%;"></div>
+	<div id="smallSlider1"></div>
+</div>
+
+<script>
+$(document).ready(function() {
+		var bigSliderOldIdx = 0;
+		var smallSliderOldIdx = 0;
+		$("#bigSlider").load("content/home_content/bigslider.html");
+		$("#categories").load("content/home_content/categories.html");
+		$("#smallSlider1").load("content/home_content/smallslider.html");	
+		
+		$.caph.focus.activate(function(nearestFocusableFinderProvider, controllerProvider) {
+	        controllerProvider.onFocused(function(event, originalEvent) {
+	        console.log("On focused!  " + event + " orig event" + originalEvent);
+	       	 	$(event.currentTarget).css({
+					border: '3px solid red'
+				});
+				
+				if ($(".swiper-slide-big.focused").length) {
+					slideBigSlider();
+				}
+				
+				if ($(".swiper-slide-small-cell-1.focused").length) {
+					slideSmallSlider();
+				}
+	        });
+	   
+	        controllerProvider.onBlurred(function(event, originalEvent) {
+	        		$(event.currentTarget).css({
+					border : '3px solid transparent'
+				});
+				$(event.currentTarget).removeClass("selected");
+	        });
+
+	 	    controllerProvider.onSelected(function(event, originalEvent) {
+	 	    		$(event.currentTarget).toggleClass("selected");
+	 	    		
+	 	    		let id = $(event.currentTarget).attr("id-data");
+				let part = $(event.currentTarget).attr("part");
+		
+				$("#detailsHref").attr("href", "content/video-details.html?dataId=" + id + "&part=" + part);
+				document.getElementById('detailsHref').click();
+			});
+	    });	
+	    
+	    
+	    function slideSmallSlider() {
+	    		var focusedIdx = parseInt($(".swiper-slide-small-cell-1.focused").index());
+			let swipe = document.querySelector('.smallIconsSwiper1').swiper;
+			
+			if (focusedIdx === -1) { 
+				console.log("-1       s  " + focusedIdx);
+				//swipe.slideTo(0);
+			} else if (focusedIdx > smallSliderOldIdx) {
+				console.log("Next focused id " + focusedIdx);
+				swipe.slideTo(focusedIdx);
+			} else {
+				console.log("Prev id" + focusedIdx);
+				swipe.slideTo(focusedIdx);
+			}
+			smallSliderOldIdx = focusedIdx;
+	    }
+	    
+	    
+	   	function slideBigSlider() {
+			var focusedIdx = parseInt($(".swiper-slide-big.focused").index());
+			let swipe = document.querySelector('.swiperBig').swiper;
+			
+			if (focusedIdx === -1) { 
+				console.log("-1       s  " + focusedIdx);
+				//swipe.slideTo(0);
+			} else if (focusedIdx > bigSliderOldIdx) {
+				console.log("Next focused id " + focusedIdx);
+				swipe.slideTo(focusedIdx);
+			} else {
+				console.log("Prev id" + focusedIdx);
+				swipe.slideTo(focusedIdx);
+			}
+			bigSliderOldIdx = focusedIdx;
+		}
+	
+});
+</script>

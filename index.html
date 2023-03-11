@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="Neodvisen TV" />
+<script src="js/jquery-3.6.1.min.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet"></link>
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/caph-jquery.min.js"></script>
+<link href="css/caph.min.css" rel="stylesheet"></link>
+<link href="css/caph-stripe.min.css" rel="stylesheet"></link>
+<title>Neodvisen TV</title>
+<link href="css/style.css" rel="stylesheet"></link>
+<link rel="stylesheet" href="css/swiper-bundle.css"></link>
+<script src="js/handlebars.min-v4.7.7.js"></script>
+<script src="js/swiper-bundle.js"></script>
+</head>
+<body>
+	<div class="container" style="max-width: 100% !important;">
+		<div class="row top_bar" style="height: 100px;">
+			<div class="col-lg-1"></div>
+			<div class="col-lg-3">
+				<div style="display: flex;">
+					<img src="images/neodvisen_tv_logo.png" class="tv_image_logo"
+						width="130" height="34" />
+					<div class="separator"></div>
+					<img src="images/neodvisen_logo.png" style="opacity: 20%;"
+						class="company_image_logo" width="130" height="34" />
+				</div>
+
+			</div>
+			<div class="col-lg-4"></div>
+			<div class="col-lg-3">
+				<div style="display: block;">
+					<img src="images/neodvisen_logo.png"
+						style="position: relative; float: right;"
+						class="company_image_logo" width="130" height="34" />
+					<div class="separator" style="position: relative; float: right;"></div>
+					<span class="sponsor_text"
+						style="position: relative; float: right;">Ogled spletne
+						televizije vam omogoča</span>
+
+				</div>
+			</div>
+			<div class="col-lg-1">
+				<p></p>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid h-100">
+		<div class="row h-100">
+			<div class="menu h-100" style= "width: 7%;">
+				<div id="home" focusable class="nav-item col-lg-4 menu-item" style="margin-left: 25%">
+					<div class="home">
+						<a href="content/home.html"></a>
+					</div>
+				</div>
+				<div id="search" focusable class="nav-item col-lg-4 menu-item" style="margin-left: 25%">
+					<div class="search">
+						<a href="content/search.html"></a>
+					</div>
+				</div>
+				<div id="profile" focusable class="nav-item col-lg-4 menu-item" style="margin-left: 25%">
+					<div class="profile">
+						<a href="content/profile.html"></a>
+					</div>
+				</div>
+			</div>
+
+			<div id="content" class="main" style="width: 93%;"></div>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+	$(document).ready(function(){
+		console.log("Index ");
+		$("#home").toggleClass("selected");
+		$("#content").load("content/home.html");
+		
+		$(".nav-item").on('selected', function() {
+			let id = $(this).attr("id");
+			if (id==="profile") {
+				$("#home").removeClass("selected");
+				$('#search').removeClass("selected");
+				$("#content").empty();
+				$("#content").load("content/profile.html");
+			} else if(id==="search"){
+				$("#home").removeClass("selected");
+				$('#profile').removeClass("selected");
+				$("#content").empty();
+				$("#content").load("content/search.html");
+			} else if(id==="home") {
+				$("#profile").removeClass("selected");
+				$('#search').removeClass("selected");
+				$("#content").empty();
+				$("#content").load("content/home.html");
+			}
+		});
+});
+ </script>
+</body>
+</html>

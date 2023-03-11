@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="Neodvisen TV" />
+<script src="../js/jquery-3.6.1.min.js"></script>
+<link href="../css/bootstrap.css" rel="stylesheet"></link>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../js/caph-jquery.min.js"></script>
+<link href="../css/caph.min.css" rel="stylesheet"></link>
+<link href="../css/caph-stripe.min.css" rel="stylesheet"></link>
+<title>Neodvisen TV</title>
+<link href="../css/style.css" rel="stylesheet"></link>
+<link rel="stylesheet" href="../css/swiper-bundle.css"></link>
+<script src="../js/handlebars.min-v4.7.7.js"></script>
+<script src="../js/swiper-bundle.js"></script>
+</head>
+<body>
+	<!--  top header  -->
+	<div class="container" style="max-width: 100% !important;">
+		<div class="row top_bar" style="height: 100px;">
+			<div class="col-lg-1"></div>
+			<div class="col-lg-3">
+				<div style="display: flex;">
+					<img src="images/neodvisen_tv_logo.png" class="tv_image_logo"
+						width="130" height="34" />
+					<div class="separator"></div>
+					<img src="images/neodvisen_logo.png" style="opacity: 20%;"
+						class="company_image_logo" width="130" height="34" />
+				</div>
+
+			</div>
+			<div class="col-lg-4"></div>
+			<div class="col-lg-3">
+				<div style="display: block;">
+					<img src="images/neodvisen_logo.png"
+						style="position: relative; float: right;"
+						class="company_image_logo" width="130" height="34" />
+					<div class="separator" style="position: relative; float: right;"></div>
+					<span class="sponsor_text"
+						style="position: relative; float: right;">Ogled spletne
+						televizije vam omogoča</span>
+
+				</div>
+			</div>
+			<div class="col-lg-1">
+				<p></p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Content -->
+
+	<div class="container-fluid h-100">
+		<div class="row h-25">
+			<div class="categoryRow">
+				<div class="categoryTextBox">
+					<p id="categoryDescription"></p>
+				</div>
+				<div class="categoryImageBox">
+					<img id="categoryImage" class="categoryImage" src="" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<script type="text/javascript">
+		var getUrlParameter = function getUrlParameter(sParam) {
+   		 	var sPageURL = window.location.search.substring(1),
+        		sURLVariables = sPageURL.split('&'),
+        		sParameterName,
+        		i;
+
+    			for (i = 0; i < sURLVariables.length; i++) {
+        			sParameterName = sURLVariables[i].split('=');
+
+        			if (sParameterName[0] === sParam) {
+            			return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        			}
+    			}
+    			return false;
+		};
+		
+		$( document ).ready(function() {
+			let dataId = getUrlParameter('dataId');
+			let part = getUrlParameter('part');
+			
+			 $.ajax({
+         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/main?id=" + dataId + "&part=" + part,
+         		type: 'GET', 
+         		crossDomain: true,
+         		success: function (data) {
+            			console.log(data);
+            			itemObject = data;
+            			$('#categoryImage').attr('src', data.image_landscape);
+            			$('#categoryDescription').append(data.content);
+            		
+         		},
+         		error: function (data) {
+             		alert('error!' + data);
+         		},
+         		complete: function (xhr, status) {
+
+         		}
+     		});
+		});
+		
+  		document.addEventListener('keydown', function(e) {
+  		console.log("Listening to: ");
+        		switch(e.keyCode){
+        		case 10009:
+        			console.log("Back tapped");
+            		window.location.href = '../index.html';
+            		break;
+        		default:
+            		console.log('Key code : ' + e.keyCode);
+           		 break;
+        		}
+    		});
+</script>
+</body>
+</html>

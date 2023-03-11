@@ -1,0 +1,66 @@
+<div id="swiperCategories" class="swiperCategories">
+	<!-- Additional required wrapper -->
+	<div id="swiper-wrapper-categories" class="swiper-wrapper-categories swiper-wrapper"></div>
+	<!-- If we need scrollbar -->
+	<div class="swiper-scrollbar-category"></div>
+	<!-- If we need navigation buttons -->
+</div>
+
+<script id="categoryCellTemplate" type="text/x-handlebars-template">
+	<div class='swiper-slide-categories swiper-slide' focusable>
+		<img src='{{ obj.image }}' width=100%' height='auto'/> 
+	</div> 
+</script>
+
+
+
+<script>
+$(document).ready(function() {	
+	  	var itemObject;
+	  	$.ajax({
+         url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/categories",
+         type: 'GET',
+         crossDomain: true,
+         success: function (categoryData) {
+            	itemObject = categoryData;
+            	var source = document.getElementById('categoryCellTemplate').innerHTML;
+			var template = Handlebars.compile(source);
+            	var listContent = "";
+            	for (let i = 0; i < categoryData.length; i++) { 
+            		var obj = categoryData[i];
+            		var context = { obj: obj };
+		    	    var html = template(context);
+            		listContent = listContent + html;
+       
+            	}
+        
+            	console.log("List content" + listContent)
+            $("#swiper-wrapper-categories").append(listContent);
+            $(".swiper-slide-categories").first().attr("data-focusable-name", "firstCategoryElement");
+            	$(".swiper-slide-categories").first().attr("data-focusable-initial-focus", "true");
+            	$(".swiper-slide-categories").last().attr("data-focusable-next-focus-right", "firstCategoryElement");
+            	
+           const swipeCat = new Swiper('.swiperCategories', {
+  		   		// Optional parameters
+  		   		direction: 'horizontal',
+  		   		slidesPerView: "auto",
+  		   		spaceBetween: 20,
+        			centeredSlides: true,
+  				// And if we need scrollbar
+  				scrollbar: {
+    					el: '.swiper-scrollbar-category',
+  				}
+			});
+			
+			swipeCat.slideTo(2);
+         },
+         error: function (data) {
+             alert('error!' + data);
+         },
+         complete: function (xhr, status) {
+
+         }
+     });
+	    
+});
+</script>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="Neodvisen TV" />
+<script src="../js/jquery-3.6.1.min.js"></script>
+<link href="../css/bootstrap.css" rel="stylesheet"></link>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../js/caph-jquery.min.js"></script>
+<link href="../css/caph.min.css" rel="stylesheet"></link>
+<link href="../css/caph-stripe.min.css" rel="stylesheet"></link>
+<title>Neodvisen TV</title>
+<link href="../css/style.css" rel="stylesheet"></link>
+<link rel="stylesheet" href="../css/swiper-bundle.css"></link>
+<script src="../js/handlebars.min-v4.7.7.js"></script>
+<script src="../js/swiper-bundle.js"></script>
+</head>
+<body>
+	<!--  top header  -->
+	<div class="container" style="max-width: 100% !important;">
+		<div class="row top_bar" style="height: 100px;">
+			<div class="col-lg-1"></div>
+			<div class="col-lg-3">
+				<div style="display: flex;">
+					<img src="images/neodvisen_tv_logo.png" class="tv_image_logo"
+						width="130" height="34" />
+					<div class="separator"></div>
+					<img src="images/neodvisen_logo.png" style="opacity: 20%;"
+						class="company_image_logo" width="130" height="34" />
+				</div>
+
+			</div>
+			<div class="col-lg-4"></div>
+			<div class="col-lg-3">
+				<div style="display: block;">
+					<img src="images/neodvisen_logo.png"
+						style="position: relative; float: right;"
+						class="company_image_logo" width="130" height="34" />
+					<div class="separator" style="position: relative; float: right;"></div>
+					<span class="sponsor_text"
+						style="position: relative; float: right;">Ogled spletne
+						televizije vam omogoča</span>
+
+				</div>
+			</div>
+			<div class="col-lg-1">
+				<p></p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Content -->
+
+	<div class="container-fluid ">
+		<div class="row">
+			<div class="videoRow">
+				<p id="enterPinTitle" class="enterPinTitle">VPIŠI KODO ZA VSTOP</p>
+				<div class="pin-code">
+	  				<input id="test" type="text" maxlength="1" focusable>
+    					<input type="text" maxlength="1" focusable>
+	  				<input type="text" maxlength="1" focusable>
+    					<input type="text" maxlength="1" focusable>
+    					<input type="text" maxlength="1" focusable>
+ 				</div>
+ 				<p id="closedTypeText" class="closedTypeText"></p>
+				<div class="videoTextBox">
+					<p id="videoTitle"></p>
+					<p id="videoSubtitle"></p>
+					<p id="videoDescription"></p>
+					<div id="enterButton" focusable><span>Vstopi</span><img class="enterIcon" src="../images/play-circle-fill.svg" height="35" width="35"/></div>
+				</div>
+				<div class="imageBox">
+					<img id="videoImage" style="width: 90%; margin-left: 5%; margin-right: 5%;" class="videoImage" src="" />
+				</div>
+				
+				<div class="shadow">
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<script type="text/javascript">
+		var getUrlParameter = function getUrlParameter(sParam) {
+   		 	var sPageURL = window.location.search.substring(1),
+        		sURLVariables = sPageURL.split('&'),
+        		sParameterName,
+        		i;
+
+    			for (i = 0; i < sURLVariables.length; i++) {
+        			sParameterName = sURLVariables[i].split('=');
+
+        			if (sParameterName[0] === sParam) {
+            			return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        			}
+    			}
+    			return false;
+		};
+		
+		$( document ).ready(function() {
+			let dataId = getUrlParameter('dataId');
+			let part = getUrlParameter('part');
+			
+			 $.ajax({
+         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/main?id=" + dataId + "&part=" + part,
+         		type: 'GET', 
+         		crossDomain: true,
+         		success: function (data) {
+            			console.log(data);
+            			itemObject = data;
+            			$('#videoImage').attr('src', data.image_landscape);
+            			$('#videoTitle').append(data.title.toUpperCase());
+            			$('#videoSubtitle').append(data.introtext);
+            			$('#videoDescription').append(data.content);
+            			$('#closedTypeText').append(data.closedgrouptext)
+            		
+         		},
+         		error: function (data) {
+             		alert('error!' + data);
+         		},
+         		complete: function (xhr, status) {
+
+         		}
+     		});
+		});
+		
+  		document.addEventListener('keydown', function(e) {
+  		console.log("Listening to: ");
+        		switch(e.keyCode){
+        		case 10009:
+        			console.log("Back tapped");
+            		window.location.href = '../index.html';
+            		break;
+        		default:
+            		console.log('Key code : ' + e.keyCode);
+           		 break;
+        		}
+    		});
+    		
+    		
+		var pinContainer = document.querySelector(".pin-code");
+		console.log('There is ' + pinContainer.length + ' Pin Container on the page.');
+
+		pinContainer.addEventListener('keyup', function (event) {
+    			var target = event.srcElement;
+    
+    			var maxLength = parseInt(target.attributes["maxlength"].value, 10);
+    			var myLength = target.value.length;
+
+    			if (myLength >= maxLength) {
+        			var next = target;
+        			while (next = next.nextElementSibling) {
+            			if (next == null) break;
+            			if (next.tagName.toLowerCase() == "input") {
+                			next.focus();
+                			break;
+            			}
+        			}
+    			}
+
+    			if (myLength === 0) {
+        			var next = target;
+        			while (next = next.previousElementSibling) {
+            			if (next == null) break;
+            			if (next.tagName.toLowerCase() == "input") {
+                			next.focus();
+                			break;
+            			}
+        			}
+   		 	}
+		}, false);
+
+		pinContainer.addEventListener('keydown', function (event) {
+    			var target = event.srcElement;
+    			target.value = "";
+		}, false);
+		
+		$.caph.focus.activate(function(nearestFocusableFinderProvider, controllerProvider) {
+	        controllerProvider.onFocused(function(event, originalEvent) {
+	        console.log("On focused!  " + event + " orig event" + originalEvent);
+	       	 	$(event.currentTarget).css({
+					border: '3px solid red'
+				});
+	        });
+	   
+	        controllerProvider.onBlurred(function(event, originalEvent) {
+	        		$(event.currentTarget).css({
+					border : '3px solid transparent'
+				});
+				$(event.currentTarget).removeClass("selected");
+	        });
+
+	 	    controllerProvider.onSelected(function(event, originalEvent) {
+	 	    		$(event.currentTarget).toggleClass("selected");
+	 	    		
+			});
+	    });	
+	    
+	    $('#test').caphInput({
+               onFocused :function(event,originalEvent){
+               	 $(event.currentTarget).css({
+                        border : '1px solid red'
+                    });
+               },
+               onBlurred :function(event,originalEvent){
+                   $(event.currentTarget).css({
+                       border : ''
+                   });
+               },
+               onChanged :function(event,value){
+               	console.log("value", value);
+               },
+             	type : 'text',
+ 				maxLength : 40,
+ 				placeHolder : 'place-holder',
+ 				value:'input1'
+           });
+</script>
+</body>
+</html>

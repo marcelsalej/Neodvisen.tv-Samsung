@@ -1,0 +1,124 @@
+<div class="swiper swiperBig">
+	<!-- Additional required wrapper -->
+	<div id="swiper-wrapper" class="swiper-wrapper"></div>
+	<!-- If we need scrollbar -->
+	<div class="swiper-scrollbar"></div>
+</div>
+<a id="detailsHref"></a>
+
+<script id="bigCellTemplate" type="text/x-handlebars-template">
+    <div class='swiper-slide swiper-slide-big' part='{{ obj.part }}' id-data='{{ obj.id }}' focusable> 
+    		<img src='{{ obj.image_landscape }}' width='100%' height='auto'/> 
+    		<div class='contentBackground'> 
+		{{#if obj.hour2 }}
+    			<table class='contentTextsTable'>
+    				<tr class='bottomBorder'>
+					<td class="placeholderRow">
+						<p class="bigSliderTitle">Stream v živo za:</p>
+					</td> 
+   				 	<td>
+						<p class="bigSliderValue">{{ obj.title }}</p>
+					</td>
+				</tr> 
+    				<tr class='bottomBorder'>
+					<td class="placeholderRow">
+						<p class="bigSliderTitle">dne:</p>
+					</td> 
+    				 	<td>
+						<p class="bigSliderValue">{{ obj.date }}</p>
+					</td>
+				</tr> 
+    			 	<tr class='bottomBorder'>
+					<td class="placeholderRow">
+						<p class="bigSliderTitle">za mladostnike ob:</p>
+					</td> 
+    				 	<td>
+						<p class="bigSliderValue">{{ obj.hour1 }}</p>
+					</td>
+				</tr> 
+				 
+    				 	<tr class='bottomBorder'>
+						<td class="placeholderRow">
+							<p class="bigSliderTitle">za odrasle ob:</p>
+						</td> 
+						<td>
+							<p class="bigSliderValue">{{ obj.hour2 }}</p>
+						</td>
+					</tr> 
+    				 <tr>
+					<td colspan="2">
+						<p class="bigSliderMessage">{{ obj.message }}</p>
+					</td>
+				 </tr>
+    			</table> 
+ 			{{else}} 
+				<table class='eventTextsTable'>
+					<tr class='bottomBorder'>
+						<td colspan='2'>
+							<p class='dateRow'>{{ obj.date }}</p>
+						</td> 
+					</tr>
+					<tr>
+						<td colspan='2'>
+							<p class='hourRow'><span class="prefixHour">ob</span> {{ obj.hour1 }}</p>
+						</td> 
+					</tr>	
+				</table>
+			 {{/if}}
+    		</div>
+   </div>
+</script>
+
+
+<script>
+$(document).ready(function() {
+	$(".swiper-slide-big").on('selected', function() {
+		console.log("swiper clicked");
+	});
+		
+
+	 $.ajax({
+         url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/intro/bigslider",
+         type: 'GET',
+         crossDomain: true,
+         success: function (data) {
+            console.log(data);
+            	itemObject = data;
+            	var source = document.getElementById("bigCellTemplate").innerHTML;
+			var template = Handlebars.compile(source);
+            	var listContent;
+            	for (let i = 0; i < data.length; i++) { 
+            		var obj = data[i];
+            		var context = { obj: obj };
+		    	    var html = template(context);
+            		listContent = listContent + html;
+            	}
+            	console.log("List content" + listContent)
+            $("#swiper-wrapper").append(listContent);
+         	$(".swiper-slide-big").first().attr("data-focusable-name", "firstElement");
+            	$(".swiper-slide-big").first().attr("data-focusable-initial-focus", "true");
+            	$(".swiper-slide-big").last().attr("data-focusable-next-focus-right", "firstElement");
+            	
+           const swiper = new Swiper('.swiperBig', {
+  		   		// Optional parameters
+  		   		direction: 'horizontal',
+  		   		slidesPerView: "auto",
+  		   		spaceBetween: 20,
+        			centeredSlides: true,
+
+  				// And if we need scrollbar
+  				scrollbar: {
+    					el: '.swiper-scrollbar',
+  				}
+			});
+         },
+         error: function (data) {
+             alert('error!' + data);
+         },
+         complete: function (xhr, status) {
+
+         }
+     });
+     
+});
+</script>

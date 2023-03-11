@@ -1,0 +1,67 @@
+<div id="smallIconsSwiper1" class="swiper smallIconsSwiper1">
+	<!-- Additional required wrapper -->
+	<div id="swiper-wrapper-small-icon-1" class="swiper-wrapper-small-icon-1 swiper-wrapper"></div>
+	<!-- If we need scrollbar -->
+	<div class="swiper-scrollbar-small-icon-1"></div>
+	<!-- If we need navigation buttons -->
+</div>
+
+
+<script id="smallCell1Template" type="text/x-handlebars-template">
+	<div class='swiper-slide-small-cell-1 swiper-slide' focusable>
+		<img src='{{ obj.image_landscape }}'/> 
+	</div> 
+</script>
+
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+	  	var itemObject;
+	  	$.ajax({
+         url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/intro/smallslider",
+         type: 'GET',
+         crossDomain: true,
+         success: function (smallSliderData) {
+            	itemObject = smallSliderData;
+         	
+            	var source = document.getElementById('smallCell1Template').innerHTML;
+			var template = Handlebars.compile(source);
+            	var listContent = "";
+            	for (let i = 0; i < smallSliderData.length; i++) { 
+            		var obj = smallSliderData[i];
+            		var context = { obj: obj };
+		    	    var html = template(context);
+            		listContent = listContent + html;
+            	}
+        
+            $("#swiper-wrapper-small-icon-1").append(listContent);
+            
+            	$(".swiper-slide-small-cell-1").first().attr("data-focusable-name", "firstCategoryElement");
+            	$(".swiper-slide-small-cell-1").first().attr("data-focusable-initial-focus", "true");
+            	$(".swiper-slide-small-cell-1").last().attr("data-focusable-next-focus-right", "firstCategoryElement");
+            	
+           const swiperSmall = new Swiper('#smallIconsSwiper1', {
+  		   		// Optional parameters
+  		   		direction: 'horizontal',
+  		   		slidesPerView: "auto",
+  		   		spaceBetween: 20,
+        			centeredSlides: true,
+
+  				// And if we need scrollbar
+  				scrollbar: {
+    					el: '.swiper-scrollbar-small-icon-1',
+  				}
+			});
+			swiperSmall.slideTo(1);
+         },
+         error: function (data) {
+             alert('error!' + data);
+         },
+         complete: function (xhr, status) {
+
+         }
+     });
+	    
+});
+</script>
