@@ -40,8 +40,15 @@ $(document).ready(function() {
 	 	    		
 	 	    		let id = $(event.currentTarget).attr("id-data");
 				let part = $(event.currentTarget).attr("part");
-		
-				$("#detailsHref").attr("href", "content/video-details.html?dataId=" + id + "&part=" + part);
+				
+				console.log("Selected");
+				if($(event.currentTarget).hasClass("swiper-slide-big") == true) {
+					$("#detailsHref").attr("href", "content/video-details.html?dataId=" + id + "&part=" + part);
+				} else if($(event.currentTarget).hasClass("swiper-slide-categories") == true) {
+					$("#detailsHref").attr("href", "content/category-details.html?dataId="+id);
+				} else if($(event.currentTarget).hasClass("swiper-slide-small-cell-1") == true) {
+					$("#detailsHref").attr("href", "content/video-details.html?dataId=" + id + "&part=" + part);
+				}
 				document.getElementById('detailsHref').click();
 			});
 	    });	

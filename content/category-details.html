@@ -24,10 +24,10 @@
 			<div class="col-lg-1"></div>
 			<div class="col-lg-3">
 				<div style="display: flex;">
-					<img src="images/neodvisen_tv_logo.png" class="tv_image_logo"
-						width="130" height="34" />
+					<img id="sponsorLogo" style="position: relative; float: right;"
+						class="company_image_logo" width="150" height="auto" />
 					<div class="separator"></div>
-					<img src="images/neodvisen_logo.png" style="opacity: 20%;"
+					<img src="../images/neodvisen_logo.png" style="opacity: 20%;"
 						class="company_image_logo" width="130" height="34" />
 				</div>
 
@@ -35,7 +35,7 @@
 			<div class="col-lg-4"></div>
 			<div class="col-lg-3">
 				<div style="display: block;">
-					<img src="images/neodvisen_logo.png"
+					<img src="../images/neodvisen_logo.png"
 						style="position: relative; float: right;"
 						class="company_image_logo" width="130" height="34" />
 					<div class="separator" style="position: relative; float: right;"></div>
@@ -53,23 +53,52 @@
 
 	<!-- Content -->
 
-	<div class="container-fluid h-100">
-		<div class="row h-25">
-			<div class="categoryRow">
-				<div class="categoryTextBox">
-					<p id="categoryDescription"></p>
-				</div>
-				<div class="categoryImageBox">
-					<img id="categoryImage" class="categoryImage" src="" />
+	<div class="container-fluid ">
+		<div class="row">
+			<div class="headerContainer col-lg-12"
+				style="height: 490px; position: relative;">
+				<img id="backgroundImage"
+					class="categories-background-image col-lg-12" src="" />
+				<div id="textContainer" class="categories-text-container col-lg-10">
+					<p id="titleLabel" class="categories-title-label"></p>
+					<p id="contentLabel" class="categories-content-label"></p>
 				</div>
 			</div>
+			
+		</div>	
+		<div id="seasonsList" class="swiper seasons-list">
+			<div id="swiper-season-list-wrapper" class="swiper-wrapper-seasons swiper-wrapper"></div>
 		</div>
+		<a id="detailsHref" href=""></a>
 	</div>
 
 
+	<script id="seasonTemplate" type="text/x-handlebars-template">
+	  <div class="swiper-slide" style="height: auto;" data-index="{{ container.iterator }}">
+		<div class="season-title-container">
+			<div class="season-category-title"><p>{{ container.category.pagetitle }}</p></div>		
+			<div class="season-title-separator"><p>|</p></div>
+			<div class="season-year-title"><p>{{ container.firstSeason.season }}</p></div>
+		</div>
+		<div id="seasonsSwiper{{ container.iterator }}" class="swiper seasonsSwiper">
+			<!-- Additional required wrapper -->
+			<div id="swiper-wrapper-seasons{{ container.iterator }}" class="swiper-wrapper-seasons swiper-wrapper"></div>
+			<!-- If we need scrollbar -->
+			<div class="swiper-scrollbar-seasons"></div>
+			<!-- If we need navigation buttons -->
+		</div>
+	  </div>
+	</script>
+
+	<script id="smallCell1Template" type="text/x-handlebars-template">
+		<div class='swiper-slide-small-cell-1 swiper-slide' data-id="{{ obj.id }}" part="{{ obj.part }}" focusable>
+			<img src='{{ obj.image_landscape }}'/> 
+		</div> 
+	</script>
 
 
 	<script type="text/javascript">
+	var categoryId;
 		var getUrlParameter = function getUrlParameter(sParam) {
    		 	var sPageURL = window.location.search.substring(1),
         		sURLVariables = sPageURL.split('&'),
@@ -86,20 +115,84 @@
     			return false;
 		};
 		
+		var smallSliderOldIdx = 0;
+		var mainIndex = 0;
 		$( document ).ready(function() {
+			const profileData = JSON.parse(localStorage.getItem('profileData'));
+			if(profileData) {
+				$("#sponsorLogo").attr("src", profileData.sponsorimage)
+			}
+		
 			let dataId = getUrlParameter('dataId');
-			let part = getUrlParameter('part');
-			
+			categoryId = dataId;
 			 $.ajax({
-         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/main?id=" + dataId + "&part=" + part,
+         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/list?id=" + dataId,
          		type: 'GET', 
          		crossDomain: true,
          		success: function (data) {
             			console.log(data);
             			itemObject = data;
-            			$('#categoryImage').attr('src', data.image_landscape);
-            			$('#categoryDescription').append(data.content);
             		
+            			$("#backgroundImage").attr("src", itemObject.category.image_landscape);
+            			$("#titleLabel").append(itemObject.category.pagetitle);
+            			$("#contentLabel").append(itemObject.category.content);
+            			
+            			
+					const groupedVideos = Object.values(itemObject.items.reduce((acc, item) => {
+    						// Append the item to the array for each country
+    						acc[item.season] = [...(acc[item.season] || []), item];
+    						return acc;
+					}, {}))
+					
+					var source = document.getElementById('seasonTemplate').innerHTML;
+					var template = Handlebars.compile(source);
+            			var listContent = "";
+            			for (let i = 0; i < groupedVideos.length; i++) { 
+            				var seasonItems = groupedVideos[i]; 
+            				var context = { container: { seasonItem: seasonItems, firstSeason: seasonItems[0], category: data.category, iterator: i }};
+		    	    			var html = template(context);
+            				listContent = listContent + html;
+            			}
+            			
+            			$("#swiper-season-list-wrapper").append(listContent)
+        				for (let i = 0; i < groupedVideos.length; i++) { 
+        					var listContent = "";
+        					let videos = groupedVideos[i];
+        					var source = document.getElementById('smallCell1Template').innerHTML;
+						var template = Handlebars.compile(source);
+            				for (let k = 0; k < videos.length; k++) { 
+            					var obj = videos[k];
+            					var context = { obj: obj };
+		    	    				var html = template(context);
+            					listContent = listContent + html;
+            				}
+        					
+        					$('#swiper-wrapper-seasons'+i).append(listContent);
+        					new Swiper('#seasonsSwiper'+i, {
+  		   					// Optional parameters
+  		   					direction: 'horizontal',
+  		   					slidesPerView: "auto",
+  		   					spaceBetween: 20,
+        						centeredSlides: true,
+
+  							// And if we need scrollbar
+  							scrollbar: {
+    								el: '.swiper-scrollbar-seasons',
+  							}
+						});
+					}
+					
+					var swiper = new Swiper("#seasonsList", {
+      					direction: "vertical",
+      					slidesPerView: "auto",
+  		   				spaceBetween: 20,
+        					centeredSlides: true,
+  		   				keyboardControl: true
+      				});
+					swiper.allowSlidePrev = true;
+					swiper.allowSlideNext = true;
+					console.log("Items " + groupedVideos);
+            			
          		},
          		error: function (data) {
              		alert('error!' + data);
@@ -108,15 +201,86 @@
 
          		}
      		});
+     		
+     		$.caph.focus.activate(function(nearestFocusableFinderProvider, controllerProvider) {
+	        		controllerProvider.onFocused(function(event, originalEvent) {
+	        			console.log("On focused!  " + event + " orig event" + originalEvent);
+	       	 		$(event.currentTarget).css({
+						border: '3px solid red'
+					});
+				
+					if ($(".swiper-slide-small-cell-1.focused").length) {
+						slideSmallSlider();
+					}
+					 
+					 let swiper = $(".swiper-slide-small-cell-1.focused").parent().parent().parent();
+					 let index = swiper.attr("data-index");
+					 if(index != mainIndex) {
+					 	mainIndex = index
+					 	slideMainContent(); 
+					 }
+					 
+	        		});
+	   
+	        		controllerProvider.onBlurred(function(event, originalEvent) {
+	        			$(event.currentTarget).css({
+						border : '3px solid transparent'
+					});
+					$(event.currentTarget).removeClass("selected");
+	        		});
+
+	 	    		controllerProvider.onSelected(function(event, originalEvent) {
+	 	    			$(event.currentTarget).toggleClass("selected");
+	 	    		
+	 	    			let id = $(event.currentTarget).attr("data-id");
+					let part = $(event.currentTarget).attr("part");
+				
+					console.log("Selected");
+					if($(event.currentTarget).hasClass("swiper-slide-small-cell-1") == true) {
+						$("#detailsHref").attr("href", "video-details.html?dataId=" + id + "&part=" + part+"&categoryId="+categoryId);
+					}
+					document.getElementById('detailsHref').click();
+				});
+			});
+			
+			function slideMainContent() {
+	    			let swiper = $(".swiper-slide-small-cell-1.focused").parent().parent().parent();
+	    			let index = parseInt(swiper.attr("data-index"));
+	    			let swipe = document.querySelector("#seasonsList").swiper;
+	    			swipe.slideTo(index);
+	    		}
+			
+			
+			function slideSmallSlider() {
+	    		var focusedIdx = parseInt($(".swiper-slide-small-cell-1.focused").index());
+	    		let swiper = $(".swiper-slide-small-cell-1.focused").parent().parent().attr('id');
+	    		let swipe = document.querySelector("#"+swiper).swiper;
+	    		
+			if (focusedIdx === -1) { 
+				console.log("-1       s  " + focusedIdx);
+				//swipe.slideTo(0);
+			} else if (focusedIdx > smallSliderOldIdx) {
+				console.log("Next focused id " + focusedIdx);
+				swipe.slideTo(focusedIdx);
+			} else {
+				console.log("Prev id" + focusedIdx);
+				swipe.slideTo(focusedIdx);
+			}
+			smallSliderOldIdx = focusedIdx;
+	    		}
 		});
-		
-  		document.addEventListener('keydown', function(e) {
+	    
+	    document.addEventListener('keydown', function(e) {
   		console.log("Listening to: ");
         		switch(e.keyCode){
         		case 10009:
         			console.log("Back tapped");
             		window.location.href = '../index.html';
             		break;
+            	case 40:
+            	//down key
+            	case 38:
+            	// up key
         		default:
             		console.log('Key code : ' + e.keyCode);
            		 break;

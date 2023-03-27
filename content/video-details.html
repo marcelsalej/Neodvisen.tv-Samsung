@@ -35,9 +35,8 @@
 			<div class="col-lg-4"></div>
 			<div class="col-lg-3">
 				<div style="display: block;">
-					<img src="images/neodvisen_logo.png"
-						style="position: relative; float: right;"
-						class="company_image_logo" width="130" height="34" />
+					<img id="sponsorLogo" style="position: relative; float: right;"
+						class="company_image_logo" width="150" height="auto" />
 					<div class="separator" style="position: relative; float: right;"></div>
 					<span class="sponsor_text"
 						style="position: relative; float: right;">Ogled spletne
@@ -58,11 +57,11 @@
 			<div class="videoRow">
 				<p id="enterPinTitle" class="enterPinTitle">VPIŠI KODO ZA VSTOP</p>
 				<div class="pin-code">
-	  				<input id="test" type="text" maxlength="1" focusable>
-    					<input type="text" maxlength="1" focusable>
-	  				<input type="text" maxlength="1" focusable>
-    					<input type="text" maxlength="1" focusable>
-    					<input type="text" maxlength="1" focusable>
+	  				<input id="test" inputable type="text" maxlength="1" focusable />
+    					<input type="text" inputable="true" maxlength="1" focusable />
+	  				<input type="text" inputable="true" maxlength="1" focusable />
+    					<input type="text" inputable="true" maxlength="1" focusable />
+    					<input type="text" inputable="true" maxlength="1" focusable />
  				</div>
  				<p id="closedTypeText" class="closedTypeText"></p>
 				<div class="videoTextBox">
@@ -100,10 +99,16 @@
     			}
     			return false;
 		};
-		
+		var categoryId;
 		$( document ).ready(function() {
+			const profileData = JSON.parse(localStorage.getItem('profileData'));
+			if(profileData) {
+				$("#sponsorLogo").attr("src", profileData.sponsorimage)
+			}
+		
 			let dataId = getUrlParameter('dataId');
 			let part = getUrlParameter('part');
+			categoryId = getUrlParameter('categoryId');
 			
 			 $.ajax({
          		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/main?id=" + dataId + "&part=" + part,
@@ -117,6 +122,16 @@
             			$('#videoSubtitle').append(data.introtext);
             			$('#videoDescription').append(data.content);
             			$('#closedTypeText').append(data.closedgrouptext)
+            			
+            			if(data.security != "password" && data.security != "subscription") {
+            				$(".pin-code").remove();
+            			} else {
+            				console.log("subscription or pw");
+            				$("#enterButton").remove();
+            				$(".videoTextBox").addClass("videoTextBoxNoButton");
+            				$(".videoTextBoxNoButton").removeClass("videoTextBox");
+     
+            			}
             		
          		},
          		error: function (data) {
@@ -133,7 +148,11 @@
         		switch(e.keyCode){
         		case 10009:
         			console.log("Back tapped");
-            		window.location.href = '../index.html';
+        			if(categoryId) {
+        				window.location.href = 'category-details.html?dataId='+categoryId;
+        			} else {
+            			window.location.href = '../index.html';
+            		}
             		break;
         		default:
             		console.log('Key code : ' + e.keyCode);
@@ -188,10 +207,17 @@
 	        });
 	   
 	        controllerProvider.onBlurred(function(event, originalEvent) {
+	        console.log("Test");
+	        if($(event.currentTarget).attr("id") == "enterButton" || $(event.currentTarget).attr("inputable").length != 0) {
+	        		$(event.currentTarget).css({
+					border : '3px solid white'
+				});
+				$(event.currentTarget).removeClass("selected");
+	        } else {
 	        		$(event.currentTarget).css({
 					border : '3px solid transparent'
 				});
-				$(event.currentTarget).removeClass("selected");
+	        }
 	        });
 
 	 	    controllerProvider.onSelected(function(event, originalEvent) {
@@ -199,26 +225,6 @@
 	 	    		
 			});
 	    });	
-	    
-	    $('#test').caphInput({
-               onFocused :function(event,originalEvent){
-               	 $(event.currentTarget).css({
-                        border : '1px solid red'
-                    });
-               },
-               onBlurred :function(event,originalEvent){
-                   $(event.currentTarget).css({
-                       border : ''
-                   });
-               },
-               onChanged :function(event,value){
-               	console.log("value", value);
-               },
-             	type : 'text',
- 				maxLength : 40,
- 				placeHolder : 'place-holder',
- 				value:'input1'
-           });
 </script>
 </body>
 </html>
