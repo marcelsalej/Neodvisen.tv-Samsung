@@ -24,8 +24,8 @@
 			<div class="col-lg-1"></div>
 			<div class="col-lg-3">
 				<div style="display: flex;">
-					<img id="sponsorLogo" style="position: relative; float: right;"
-						class="company_image_logo" width="150" height="auto" />
+					<img src="../images/neodvisen_tv_logo.png" class="tv_image_logo"
+						width="130" height="34" />
 					<div class="separator"></div>
 					<img src="../images/neodvisen_logo.png" style="opacity: 20%;"
 						class="company_image_logo" width="130" height="34" />
@@ -34,14 +34,12 @@
 			</div>
 			<div class="col-lg-4"></div>
 			<div class="col-lg-3">
-				<div style="display: block;">
-					<img src="../images/neodvisen_logo.png"
-						style="position: relative; float: right;"
-						class="company_image_logo" width="130" height="34" />
+				<div id="sponsor-container" style="display: block;">
+					<img id="sponsorLogo" style="position: relative; float: right;"
+						class="company_image_logo" width="200" height="auto" />
 					<div class="separator" style="position: relative; float: right;"></div>
 					<span class="sponsor_text"
-						style="position: relative; float: right;">Ogled spletne
-						televizije vam omogoča</span>
+						style="position: relative; float: right;">Ogled omogoča:</span>
 
 				</div>
 			</div>
@@ -120,7 +118,10 @@
 		$( document ).ready(function() {
 			const profileData = JSON.parse(localStorage.getItem('profileData'));
 			if(profileData) {
-				$("#sponsorLogo").attr("src", profileData.sponsorimage)
+				$("#sponsor-container").show();
+				$("#sponsorLogo").attr("src", profileData.sponsorimage);
+			} else {
+				$("#sponsor-container").hide();
 			}
 		
 			let dataId = getUrlParameter('dataId');

@@ -16,6 +16,9 @@
 <link rel="stylesheet" href="css/swiper-bundle.css"></link>
 <script src="js/handlebars.min-v4.7.7.js"></script>
 <script src="js/swiper-bundle.js"></script>
+<script type='text/javascript' src='$WEBAPIS/webapis/webapis.js'></script>
+<script type='text/javascript' src='$B2BAPIS/b2bapis/b2bapis.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.js"></script>
 </head>
 <body>
 	<div class="container" style="max-width: 100% !important;">
@@ -33,13 +36,12 @@
 			</div>
 			<div class="col-lg-4"></div>
 			<div class="col-lg-3">
-				<div style="display: block;">
+				<div id="sponsor-container" style="display: block;">
 					<img id="sponsorLogo" style="position: relative; float: right;"
-						class="company_image_logo" width="150" height="auto" />
+						class="company_image_logo" width="200" height="auto" />
 					<div class="separator" style="position: relative; float: right;"></div>
 					<span class="sponsor_text"
-						style="position: relative; float: right;">Ogled spletne
-						televizije vam omogoča</span>
+						style="position: relative; float: right;">Ogled omogoča:</span>
 
 				</div>
 			</div>
@@ -77,13 +79,22 @@
 	$(document).ready(function(){
 		const profileData = JSON.parse(localStorage.getItem('profileData'));
 		if(profileData) {
-			$("#sponsorLogo").attr("src", profileData.sponsorimage)
+			$("#sponsorLogo").attr("src", profileData.sponsorimage);
+			$("#sponsor-container").show();
+		} else {
+			$("#sponsor-container").hide();
 		}
-	
+		
+		var viewToShow = getUrlParameter("view");
 	
 		console.log("Index ");
-		$("#home").toggleClass("selected");
-		$("#content").load("content/home.html");
+		if(viewToShow != "profile") {
+			$("#home").toggleClass("selected");
+			$("#content").load("content/home.html");
+		} else {
+			$("#profile").toggleClass("selected");
+			$("#content").load("content/profile.html");
+		}
 		
 		$(".nav-item").on('selected', function() {
 			let id = $(this).attr("id");
@@ -104,7 +115,22 @@
 				$("#content").load("content/home.html");
 			}
 		});
-});
+	});
+	var getUrlParameter = function getUrlParameter(sParam) {
+   		var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        	sParameterName,
+        	i;
+
+    		for (i = 0; i < sURLVariables.length; i++) {
+        		sParameterName = sURLVariables[i].split('=');
+
+        		if (sParameterName[0] === sParam) {
+            		return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        		}
+    		}
+    		return false;
+	};
  </script>
 </body>
 </html>

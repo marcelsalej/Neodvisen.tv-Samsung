@@ -24,23 +24,22 @@
 			<div class="col-lg-1"></div>
 			<div class="col-lg-3">
 				<div style="display: flex;">
-					<img src="images/neodvisen_tv_logo.png" class="tv_image_logo"
+					<img src="../images/neodvisen_tv_logo.png" class="tv_image_logo"
 						width="130" height="34" />
 					<div class="separator"></div>
-					<img src="images/neodvisen_logo.png" style="opacity: 20%;"
+					<img src="../images/neodvisen_logo.png" style="opacity: 20%;"
 						class="company_image_logo" width="130" height="34" />
 				</div>
 
 			</div>
 			<div class="col-lg-4"></div>
 			<div class="col-lg-3">
-				<div style="display: block;">
+				<div id="sponsor-container" style="display: block;">
 					<img id="sponsorLogo" style="position: relative; float: right;"
-						class="company_image_logo" width="150" height="auto" />
+						class="company_image_logo" width="200" height="auto" />
 					<div class="separator" style="position: relative; float: right;"></div>
 					<span class="sponsor_text"
-						style="position: relative; float: right;">Ogled spletne
-						televizije vam omogoča</span>
+						style="position: relative; float: right;">Ogled omogoča:</span>
 
 				</div>
 			</div>
@@ -54,36 +53,132 @@
 
 	<div class="container-fluid ">
 		<div class="row">
+			<div id="enterButton" onclick="getVideo()" style="display: none;" focusable>
+				<span>Vstopi</span>
+				<img class="enterIcon" src="../images/play-circle-fill.svg" height="35" width="35"/>
+			</div>
 			<div class="videoRow">
-				<p id="enterPinTitle" class="enterPinTitle">VPIŠI KODO ZA VSTOP</p>
-				<div class="pin-code">
-	  				<input id="test" inputable type="text" maxlength="1" focusable />
-    					<input type="text" inputable="true" maxlength="1" focusable />
-	  				<input type="text" inputable="true" maxlength="1" focusable />
-    					<input type="text" inputable="true" maxlength="1" focusable />
-    					<input type="text" inputable="true" maxlength="1" focusable />
+				<div id="authDetails">
+					<p id="enterPinTitle" class="enterPinTitle">VPIŠI KODO ZA VSTOP</p>
+					<div class="pin-code">
+	  					<input id="test" class="pin-number-container" inputable type="text" maxlength="1" focusable />
+    						<input type="text" class="pin-number-container" inputable="true" maxlength="1" focusable />
+	  					<input type="text" class="pin-number-container" inputable="true" maxlength="1" focusable />
+    						<input type="text" class="pin-number-container" inputable="true" maxlength="1" focusable />
+    						<input type="text" class="pin-number-container" inputable="true" maxlength="1" focusable />
+ 					</div>
+ 					<p id="closedTypeText" class="closedTypeText"></p>
  				</div>
- 				<p id="closedTypeText" class="closedTypeText"></p>
 				<div class="videoTextBox">
 					<p id="videoTitle"></p>
 					<p id="videoSubtitle"></p>
 					<p id="videoDescription"></p>
-					<div id="enterButton" focusable><span>Vstopi</span><img class="enterIcon" src="../images/play-circle-fill.svg" height="35" width="35"/></div>
 				</div>
 				<div class="imageBox">
 					<img id="videoImage" style="width: 90%; margin-left: 5%; margin-right: 5%;" class="videoImage" src="" />
 				</div>
-				
 				<div class="shadow">
+				</div>
+			</div>
+		</div>
+		
+		<a id="playerNavigation" href="video-player.html"></a>
+	</div>
+
+	
+	<!-- Error box -->
+	
+	<div class="modal fade error-modal modal-xl" id="errorModal" tabindex="-1" role="dialog"
+		aria-labelledby="errorModalLabel" aria-hidden="true">
+		<div class="modal-dialog error-modal-dialog" role="document">
+			<div class="modal-content error-modal-content">
+				<p id="errorMessage" class="error-message"></p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Login success Modal -->
+	<div class="modal fade" id="loginSuccessModal" tabindex="-1" role="dialog"
+		aria-labelledby="loginSuccessModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-fullscreen" role="document">
+			<div class="modal-content login-success-content">
+				<img class="independent-tv-image" src="" />
+				<div class="login-success-divider"></div>
+				<div class="text-tv-container">
+					<p class="login-success-description">TEMATSKE VIDEO VSEBINE ZA KREPITEV DRUŽBENE ODGOVORNOSTI</p>
+					<p class="own-style-text">V SVOJEM SLOGU</p>
+					<p class="welcome-independent-tv">Dobrodošli na <b>neodvisen.tv</b></p>
+				</div>
+				<div class="login-success-divider"></div>
+				<div class="sponsor-container">
+					<p id="sponsorDateText" class="subscription-due-date-text"></p>
+					<img id="sponsorImage" class="sponsor-image" />
 				</div>
 			</div>
 		</div>
 	</div>
 
-
+	
 
 
 	<script type="text/javascript">
+		function getVideo() {
+			console.log("Video get click");
+			var videoObject;
+			$.ajax({
+         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/stream?id="+dataId+"&part="+part+"&stream_secret="+streamSecret+"&app=true",
+         		type: 'GET', 
+         		crossDomain: true,
+         		success: function (data) {
+            			console.log(data);
+            			videoObject = data;
+          			// video obtained here show player
+          			localStorage.setItem("videoObject", JSON.stringify(videoObject));
+          			localStorage.setItem("part", part);
+          			document.getElementById('playerNavigation').click();
+         		},
+         		error: function (data) {
+             		alert('error!' + data);
+             		showErrorAlert("Napaka pri pridobivanju videa");
+         		},
+         		complete: function (xhr, status) {
+
+         		}
+     		});
+		}
+		
+		function checkUserActivation() {
+		console.log("Evaluating credentials" + profileData.sponsor);
+			$.ajax({
+         		url: 'http://devel.ekosplet.si/neodvisentv/api/v1/user/check?id='+dataId+'&part='+part+'&code='+profileData.pass+'&identity='+profileData.identity,
+         		type: 'GET', 
+         		crossDomain: true,
+         		success: function (data) {
+            			console.log(data);
+            			streamSecret = data.stream_secret;
+          			// video obtained here show player
+          			localStorage.setItem("part", part);
+          			if(streamSecret) {
+          				$(".pin-code").remove();
+            				$("#enterPinTitle").remove();
+            				$("#enterButton").toggle();
+          			} else {
+          				console.log("show pin no secret");
+						$("#enterButton").remove();
+            				$(".videoTextBox").addClass("videoTextBoxNoButton");
+            				$(".videoTextBoxNoButton").removeClass("videoTextBox");
+          			}
+         		},
+         		error: function (data) {
+             		alert('error!' + data);
+             		showErrorAlert("Napaka pri pridobivanju videa");
+         		},
+         		complete: function (xhr, status) {
+
+         		}
+     		});
+		}
+		
 		var getUrlParameter = function getUrlParameter(sParam) {
    		 	var sPageURL = window.location.search.substring(1),
         		sURLVariables = sPageURL.split('&'),
@@ -100,14 +195,23 @@
     			return false;
 		};
 		var categoryId;
+		var part;
+		var dataId;
+		var streamSecret;
+		var profileData;
+		
 		$( document ).ready(function() {
-			const profileData = JSON.parse(localStorage.getItem('profileData'));
+			profileData = JSON.parse(localStorage.getItem('profileData'));
+			console.log(profileData);
 			if(profileData) {
-				$("#sponsorLogo").attr("src", profileData.sponsorimage)
+				$("#sponsorLogo").attr("src", profileData.sponsorimage);
+				$("#sponsor-container").show();
+			} else {
+				$("#sponsor-container").hide();
 			}
 		
-			let dataId = getUrlParameter('dataId');
-			let part = getUrlParameter('part');
+			dataId = getUrlParameter('dataId');
+			part = getUrlParameter('part');
 			categoryId = getUrlParameter('categoryId');
 			
 			 $.ajax({
@@ -115,27 +219,43 @@
          		type: 'GET', 
          		crossDomain: true,
          		success: function (data) {
-            			console.log(data);
+            			console.log(data + " security " + data.security);
             			itemObject = data;
+            			streamSecret = itemObject.stream_secret;
             			$('#videoImage').attr('src', data.image_landscape);
-            			$('#videoTitle').append(data.title.toUpperCase());
+            			$('#videoTitle').append(data.title);
             			$('#videoSubtitle').append(data.introtext);
             			$('#videoDescription').append(data.content);
             			$('#closedTypeText').append(data.closedgrouptext)
             			
-            			if(data.security != "password" && data.security != "subscription") {
-            				$(".pin-code").remove();
-            			} else {
-            				console.log("subscription or pw");
-            				$("#enterButton").remove();
+					if(data.security == "subscription") {
+						if(profileData != null) {
+							checkUserActivation();
+						} else {
+							$("#authDetails").show();
+							console.log("subscription");
+							$("#enterButton").hide();
+            					$("#closedTypeText").show();
+            					$(".videoTextBox").addClass("videoTextBoxNoButton");
+            					$(".videoTextBoxNoButton").removeClass("videoTextBox");
+            				}
+					} else if(data.security == "password") {
+						console.log("password");
+						$("#authDetails").show();
+						$("#enterButton").hide();
+            				$("#closedTypeText").show();
             				$(".videoTextBox").addClass("videoTextBoxNoButton");
             				$(".videoTextBoxNoButton").removeClass("videoTextBox");
-     
-            			}
-            		
+					} else {
+						console.log("public");
+            				$(".pin-code").remove();
+            				$("#enterPinTitle").remove();
+            				$("#enterButton").toggle();
+					}
          		},
          		error: function (data) {
              		alert('error!' + data);
+             		showErrorAlert("Napaka pri pridobivanju videa");
          		},
          		complete: function (xhr, status) {
 
@@ -154,6 +274,8 @@
             			window.location.href = '../index.html';
             		}
             		break;
+            	case 13:
+            		$(".focused").click();
         		default:
             		console.log('Key code : ' + e.keyCode);
            		 break;
@@ -172,15 +294,28 @@
 
     			if (myLength >= maxLength) {
         			var next = target;
-        			while (next = next.nextElementSibling) {
-            			if (next == null) break;
-            			if (next.tagName.toLowerCase() == "input") {
-                			next.focus();
-                			break;
-            			}
+       			if(next.nextElementSibling) {
+        				while (next = next.nextElementSibling) {
+            				if (next == null) break;
+            				if (next.tagName.toLowerCase() == "input") {
+            					next.className += " focused selected pin-focus";
+                				next.focus();
+                				break;
+            				}
+        				}
+        			} else {
+        				removeAllAttributes();
+        				console.log("End entry");
+        				var pin = getWholePin();
+        				console.log("Pin:  " + pin);
+        				if(itemObject.security == "subscription") {
+        					activateUser(pin);
+        				} else {
+        					loginUser(pin);
+        				}
+        				console.log("User login");
         			}
     			}
-
     			if (myLength === 0) {
         			var next = target;
         			while (next = next.previousElementSibling) {
@@ -197,6 +332,15 @@
     			var target = event.srcElement;
     			target.value = "";
 		}, false);
+		
+		function removeAllAttributes() {
+			const allElements = document.querySelectorAll('.pin-number-container');
+			allElements.forEach((element) => {
+  				element.classList.remove('focused');
+  				element.classList.remove('selected');
+  				element.classList.remove("pin-focus");
+			});
+		}
 		
 		$.caph.focus.activate(function(nearestFocusableFinderProvider, controllerProvider) {
 	        controllerProvider.onFocused(function(event, originalEvent) {
@@ -225,6 +369,124 @@
 	 	    		
 			});
 	    });	
+	    
+	    function showSuccessAlert(loginData) {
+	    		var expireDate = new Date(loginData.expireunixtimestamp * 1000);
+         	$("#loginSuccessModal").modal('show');
+         	$("#sponsorDateText").append("Ogled vsebin do " + expireDate.getDate() + "." + expireDate.getMonth() + "." + expireDate.getFullYear() + " omogoča:");
+         	$("#sponsorImage").attr("src", loginData.sponsorimage);
+         				
+         	const func = () => {
+  				$('#loginSuccessModal').modal('hide');
+  				window.location.reload();
+			};
+			setTimeout(func, 4 * 1000);
+	   	}
+	    
+	    function showErrorAlert(message) {
+	   		$("#errorMessage").empty();
+         	$("#errorMessage").append(message);
+         	$("#errorModal").modal('show');
+         				
+         	const func = () => {
+  				$('#errorModal').modal('hide');
+			};
+			setTimeout(func, 2 * 1000);
+	   	}
+	    
+	    // pin and user auth
+	    
+	   function getWholePin() {
+			var wholePin = "";
+			const allElements = document.querySelectorAll('.pin-number-container');
+			allElements.forEach((element) => {
+				wholePin += element.value;
+			})
+			return wholePin;
+		}
+		
+		function uuidv4() {
+  			return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16) );
+		}
+		
+		function activateUser(pinCode) {
+			var formData = {
+				'code': pinCode,
+				'identity': uuidv4
+			}
+		
+			$.ajax({
+         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/user/activate",
+         		type: 'POST',
+         		data: formData,
+         		crossDomain: true,
+         		success: function (loginData) {
+         		var data = JSON.parse(loginData);
+         			if(data.code === 404) {
+         				showErrorAlert("Uporabnik ne obstaja. Prosimo poskusite znova.");
+         				$("#enterButton").remove();
+            				$(".videoTextBox").addClass("videoTextBoxNoButton");
+            				$(".videoTextBoxNoButton").removeClass("videoTextBox");
+         			} else {
+         				console.log("User activation success" + loginData);
+						localStorage.setItem("profileData", loginData);
+						$('#sponsorLogo').attr('src', data.sponsorimage);
+            				$(".pin-code").remove();
+            				$("#enterPinTitle").remove();
+            				$("#closedTypeText").remove();
+            				$("#enterButton").toggle();
+            				showSuccessAlert(data);
+         			}  
+         		},
+        			error: function (data) {
+             		alert('error!' + data);
+             		showErrorAlert("Napaka pri pridobivanju uporabnika");
+         		},
+         		complete: function (xhr, status) {
+ 					console.log("UserLoginComplete");	
+         		}
+    	 		});
+		}		
+		
+		function loginUser(pinCode) {
+			var formData = {
+				'password': pinCode,
+				'part': part,
+				'id': dataId
+			}
+		
+			$.ajax({
+         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/user/login",
+         		type: 'POST',
+         		data: formData,
+         		crossDomain: true,
+         		success: function (loginData) {
+         		var data = JSON.parse(loginData);
+         			if(data.code === 404) {
+         				showErrorAlert("Uporabnik ne obstaja. Prosimo poskusite znova.");
+         				$("#enterButton").remove();
+            				$(".videoTextBox").addClass("videoTextBoxNoButton");
+            				$(".videoTextBoxNoButton").removeClass("videoTextBox");
+         			} else {
+         				console.log("User login success" + loginData);
+						streamSecret = data.stream_secret;
+						part = data.part
+            				$(".pin-code").remove();
+            				$("#closedTypeText").remove();
+            				$("#enterPinTitle").remove();
+            				$("#enterButton").toggle();
+            				loadVideo();
+         			}  
+         		},
+        			error: function (data) {
+             		alert('error!' + data);
+             		showErrorAlert("Napaka pri pridobivanju uporabnika");
+         		},
+         		complete: function (xhr, status) {
+ 					console.log("UserLoginComplete");	
+         		}
+    	 		});
+		} 
 </script>
 </body>
 </html>

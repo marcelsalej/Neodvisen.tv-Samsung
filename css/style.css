@@ -133,10 +133,10 @@ h1 {
 }
 
 .sponsor_text {
-	margin-top: 15px;
-	color: white;
-	opacity: 0.35;
-	width: 110px;
+	margin-top: 6%;
+    color: white;
+    opacity: 0.5;
+    font-size: 27px;
 }
 
 .swiper-slide-categories {
@@ -154,6 +154,10 @@ h1 {
     width: 550px !important;
     height: auto !important;
     border-radius: 15px;
+}
+
+#sponsor-container {
+	display: none;
 }
 
 .swiper-slide-small-cell-1 > img {
@@ -298,12 +302,16 @@ h1 {
     bottom: 0;
 }
 
+#authDetails {
+	display: none;
+}
+
 .videoTextBox {
 	position: absolute;
 	padding-top: 15%;
 	padding-left: 8%;
-    padding-right: 20%;
-	bottom: 0;
+    padding-right: 8%;
+	bottom: 2%;
 	z-index: 12;
     color: rgba(255,255,255,0.7);
 }
@@ -358,14 +366,16 @@ h1 {
 }
 
 #enterButton {
-	position: absolute;
+position: absolute;
     float: right;
     width: 13%;
+    color: white;
     border-radius: 40px;
     border: 4px solid white;
     height: 70px;
-    bottom: 5%;
-    right: 7%;
+    top: 37%;
+    right: 42.5%;
+    z-index: 15;
 }
 
 .enterIcon {
@@ -673,4 +683,75 @@ input::-webkit-inner-spin-button {
 	font-size: 34px;
 	color: white;
 	text-align: center;
+}
+
+.login-success-content {
+	background-color: rgba(148,20,232,0.3);
+}
+
+.independent-tv-image {
+    position: relative;
+    margin-top: 30px;
+    width: 300px;
+    height: 300px;
+    left: 44%;
+}
+
+.login-success-divider {
+	position: relative;
+    width: 70%;
+    height: 1px;
+    background-color: white;
+    margin-top: 30px;
+    left: 15%;
+}
+
+.text-tv-container {
+	position: relative;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.login-success-description {
+	color: white;
+    font-size: 35px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.own-style-text {
+	position: relative;
+    color: red;
+    font-size: 50px;
+    text-align: center;
+    font-weight: 700;
+    padding: 16px;
+}
+
+.welcome-independent-tv {
+	position: relative;
+    text-align: center;
+    color: white;
+    font-size: 80px;
+}
+
+.subscription-due-date-text {
+	position: relative;
+	width: 100%;
+	text-align: center;
+	color: white;
+	font-size: 30px;
+	font-weight: 600;
+	padding-top: 30px;
+}
+
+.sponsor-container {
+	text-align: center;
+}
+
+.sponsor-image {
+	position: relative;
+    width: auto;
+    height: 140px;
+    margin-top: 30px;
 }
