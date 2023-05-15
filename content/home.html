@@ -48,6 +48,12 @@ $(document).ready(function() {
 					$("#detailsHref").attr("href", "content/category-details.html?dataId="+id);
 				} else if($(event.currentTarget).hasClass("swiper-slide-small-cell-1") == true) {
 					$("#detailsHref").attr("href", "content/video-details.html?dataId=" + id + "&part=" + part);
+				} else if($(event.currentTarget).is(profile)) {
+					window.location.href = 'index.html?view=profile'
+				} else if($(event.currentTarget).is(search)) {
+					window.location.href = 'index.html?view=search'
+				} else {
+					window.location.href = 'index.html'
 				}
 				document.getElementById('detailsHref').click();
 			});

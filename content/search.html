@@ -1,3 +1,113 @@
 <div>
-	<h1>Search</h1>
+	<div class="row">
+		<div class="col-lg-12" style="margin-top: 1%; height: 90px;">
+			<input id="searchInput" type="text" class="search-input" focusable id="searchInput" placeholder="Vnesi iskalno besedo" />
+			<img class="search-icon" src="images/search_icon.png" width="60" height="60" />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-12">
+			<div id="smallIconsSwiper1" class="swiper smallIconsSwiper1">
+				<!-- Additional required wrapper -->
+				<div id="swiper-wrapper-small-icon-1" class="swiper-wrapper-small-icon-1 swiper-wrapper"></div>
+			</div>
+		</div>
+	</div>
 </div>
+
+<script id="smallCell1Template" type="text/x-handlebars-template">
+	<div class='swiper-slide-small-cell-1 swiper-slide' id-data="{{ obj.id }}" part="{{ obj.part }}" focusable>
+		<img src='{{ obj.image_landscape }}'/> 
+	</div> 
+</script>
+
+<script type="text/javascript"> 
+	 var smallSliderOldIdx = 0
+	 $(document).ready(function() {
+	 
+	 	setupSlider();
+	 	$.caph.focus.activate(function(nearestFocusableFinderProvider, controllerProvider) {
+	        controllerProvider.onFocused(function(event, originalEvent) {
+	        console.log("On focused!  " + event + " orig event" + originalEvent);
+	       	 	$(event.currentTarget).css({
+					border: '3px solid red'
+				});
+				
+				if ($(".swiper-slide-small-cell-1.focused").length) {
+					slideSmallSlider();
+				}
+	        });
+	   
+	        controllerProvider.onBlurred(function(event, originalEvent) {
+	        		$(event.currentTarget).css({
+					border : '3px solid transparent'
+				});
+				$(event.currentTarget).removeClass("selected");
+	        });
+
+	 	    controllerProvider.onSelected(function(event, originalEvent) {
+	 	    
+	 	    	console.log("selected");
+	 	    });
+	 	});
+	 
+	 });
+	 
+	  function slideSmallSlider() {
+	    var focusedIdx = parseInt($(".swiper-slide-small-cell-1.focused").index());
+		let swipe = document.querySelector('.smallIconsSwiper1').swiper;
+			
+		if (focusedIdx === -1) { 
+			console.log("-1       s  " + focusedIdx);
+			//swipe.slideTo(0);
+		} else if (focusedIdx > smallSliderOldIdx) {
+			console.log("Next focused id " + focusedIdx);
+			swipe.slideTo(focusedIdx);
+		} else {
+			console.log("Prev id" + focusedIdx);
+			swipe.slideTo(focusedIdx);
+		}
+		smallSliderOldIdx = focusedIdx;
+	  }
+	 
+	 function setupSlider() {
+	 	var itemObject;
+	  	$.ajax({
+         url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/search?query=zadel",
+         type: 'GET',
+         crossDomain: true,
+         success: function (smallSliderData) {
+            	itemObject = smallSliderData;
+         	
+            	var source = document.getElementById('smallCell1Template').innerHTML;
+			var template = Handlebars.compile(source);
+            	var listContent = "";
+            	for (let i = 0; i < smallSliderData.length; i++) { 
+            		var obj = smallSliderData[i];
+            		var context = { obj: obj };
+		    	    var html = template(context);
+            		listContent = listContent + html;
+            	}
+        
+            $("#swiper-wrapper-small-icon-1").append(listContent);
+                	
+           const swiperSmall = new Swiper('#smallIconsSwiper1', {
+  		   		// Optional parameters
+  		   		direction: 'vertical',
+  		   		slidesPerView: "auto",
+  		   		grid: {
+  		   			rows: 3
+  		   		},
+  		   		spaceBetween: 20,
+			});
+			swiperSmall.slideTo(0);
+         },
+         error: function (data) {
+             alert('error!' + data);
+         },
+         complete: function (xhr, status) {
+
+         }
+	 	});
+	 }
+</script>
