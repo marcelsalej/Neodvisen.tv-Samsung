@@ -1,3 +1,95 @@
-<div>
-	<h1>Profile</h1>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-12">
+			<p class="welcome-text">Dobrodošli na <b>Neodvisen.TV</b></p>
+			<div class="row">
+				<div class="col-lg-6" style="text-align: center;">
+					<p class="theme-content-text">TEMATSKA VSEBINA ZA KREPITEV DRUŽBENE ODGOVORNOSTI</p>
+					<img class="logo-image" style="width: 40%; margin-top: 10%;" src="images/logo-2.svg" />
+				</div>
+				<div class="col-lg-6" style="border-left: 1px solid white;">
+					<div id="enterCode" class="vertical-center" style="display: none;">
+						<button id="enterPinButton" class="red-rounded-button" type="button" focusable>Vnesi aktivacijsko kodo</button>
+					</div>
+					<div id="authenticatedContent" style="display: none;">
+						<div class="text-tv-container">
+							<p class="own-style-text">V SVOJEM SLOGU</p>
+						</div>
+						<div class="sponsor-container">
+							<p id="sponsorDateText" class="subscription-due-date-text"></p>
+							<img id="sponsorImage" class="sponsor-image" />
+							<button id="logoutButton" class="red-rounded-button" style="width: 50%; margin-top: 9%;" type="button" focusable>Odjava</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<a id="pinNavigation" href="content/pin-screen.html"></a>
+	<div class="modal fade error-modal modal-xl" id="errorModal" tabindex="-1" role="dialog"
+		aria-labelledby="errorModalLabel" aria-hidden="true">
+		<div class="modal-dialog error-modal-dialog" role="document">
+			<div class="modal-content error-modal-content">
+				<p id="errorMessage" class="error-message"></p>
+			</div>
+		</div>
+	</div>
 </div>
+<script type="text/javascript"> 
+	 $(document).ready(function() {
+	 	$("#enterPinButton").on('selected', function() {
+ 			console.log("click");
+			document.getElementById('pinNavigation').click();
+		});
+		
+		$("#logoutButton").on('selected', function() {
+			localStorage.clear();
+			showClearStorageAlert("Uspešno ste se odjavili iz aplikacije.");
+			window.location.href = 'index.html?view=profile';
+		});
+		
+		var profileData = JSON.parse(localStorage.getItem("profileData"));
+		if(profileData != null) {
+			$("#authenticatedContent").show();
+			console.log("profile");
+			var expireDate = new Date(profileData.expireunixtimestamp * 1000);
+         	$("#sponsorDateText").append("Ogled vsebin do " + expireDate.getDate() + "." + expireDate.getMonth() + "." + expireDate.getFullYear() + " omogoča:");
+         	$("#sponsorImage").attr("src", profileData.sponsorimage);
+		} else {
+			$("#enterCode").show();
+		}
+		
+		$.caph.focus.activate(function(nearestFocusableFinderProvider, controllerProvider) {
+	        controllerProvider.onFocused(function(event, originalEvent) {
+	        console.log("On focused!  " + event + " orig event" + originalEvent);
+	       	 	$(event.currentTarget).css({
+					border: '3px solid white'
+				});
+	        });
+	   
+	        controllerProvider.onBlurred(function(event, originalEvent) {
+	        		$(event.currentTarget).css({
+					border : '3px solid transparent'
+				});
+				$(event.currentTarget).removeClass("selected");
+	        });
+
+	 	    controllerProvider.onSelected(function(event, originalEvent) {
+	 	    		$(event.currentTarget).toggleClass("selected");
+	 	    		
+			});
+	 	});	
+	 });
+	 
+	 function showClearStorageAlert(message) {
+	  	$("#errorMessage").empty();
+        $("#errorMessage").append(message);
+        $("#errorModal").modal('show');
+         				
+        const func = () => {
+  			$('#errorModal').modal('hide');
+  			window.location.reload();
+		};
+		setTimeout(func, 3 * 1000);
+	  }
+</script>

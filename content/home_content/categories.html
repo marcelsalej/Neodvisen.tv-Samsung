@@ -7,7 +7,7 @@
 </div>
 
 <script id="categoryCellTemplate" type="text/x-handlebars-template">
-	<div class='swiper-slide-categories swiper-slide' focusable>
+	<div class='swiper-slide-categories swiper-slide' id-data='{{ obj.id }}' focusable>
 		<img src='{{ obj.image }}' width=100%' height='auto'/> 
 	</div> 
 </script>
@@ -39,6 +39,7 @@ $(document).ready(function() {
             $(".swiper-slide-categories").first().attr("data-focusable-name", "firstCategoryElement");
             	$(".swiper-slide-categories").first().attr("data-focusable-initial-focus", "true");
             	$(".swiper-slide-categories").last().attr("data-focusable-next-focus-right", "firstCategoryElement");
+           
             	
            const swipeCat = new Swiper('.swiperCategories', {
   		   		// Optional parameters

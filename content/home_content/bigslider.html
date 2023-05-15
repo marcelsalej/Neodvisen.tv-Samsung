@@ -1,8 +1,6 @@
 <div class="swiper swiperBig">
 	<!-- Additional required wrapper -->
 	<div id="swiper-wrapper" class="swiper-wrapper"></div>
-	<!-- If we need scrollbar -->
-	<div class="swiper-scrollbar"></div>
 </div>
 <a id="detailsHref"></a>
 
@@ -86,12 +84,13 @@ $(document).ready(function() {
             	itemObject = data;
             	var source = document.getElementById("bigCellTemplate").innerHTML;
 			var template = Handlebars.compile(source);
-            	var listContent;
+            	var listContent = "";
             	for (let i = 0; i < data.length; i++) { 
             		var obj = data[i];
             		var context = { obj: obj };
 		    	    var html = template(context);
             		listContent = listContent + html;
+            		
             	}
             	console.log("List content" + listContent)
             $("#swiper-wrapper").append(listContent);
@@ -105,11 +104,6 @@ $(document).ready(function() {
   		   		slidesPerView: "auto",
   		   		spaceBetween: 20,
         			centeredSlides: true,
-
-  				// And if we need scrollbar
-  				scrollbar: {
-    					el: '.swiper-scrollbar',
-  				}
 			});
          },
          error: function (data) {

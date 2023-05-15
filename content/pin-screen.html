@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="Neodvisen TV" />
+<script src="../js/jquery-3.6.1.min.js"></script>
+<link href="../css/bootstrap.css" rel="stylesheet"></link>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../js/caph-jquery.min.js"></script>
+<link href="../css/caph.min.css" rel="stylesheet"></link>
+<link href="../css/caph-stripe.min.css" rel="stylesheet"></link>
+<title>Neodvisen TV</title>
+<link href="../css/style.css" rel="stylesheet"></link>
+<link rel="stylesheet" href="../css/swiper-bundle.css"></link>
+<script src="../js/handlebars.min-v4.7.7.js"></script>
+<script src="../js/swiper-bundle.js"></script>
+</head>
+<body>
+<div id="gradient">
+	<!--  top header  -->
+	<div class="container" style="max-width: 100% !important;">
+		<div class="row top_bar" style="height: 100px;">
+			<div class="col-lg-1"></div>
+			<div class="col-lg-3">
+				<div style="display: flex;">
+					<img src="../images/neodvisen_tv_logo.png" class="tv_image_logo"
+						width="130" height="34" />
+					<div class="separator"></div>
+					<img src="../images/neodvisen_logo.png" style="opacity: 20%;"
+						class="company_image_logo" width="130" height="34" />
+				</div>
+
+			</div>
+			<div class="col-lg-4"></div>
+			<div class="col-lg-3">
+				<div style="display: block;">
+					<img id="sponsorLogo" style="position: relative; float: right;"
+						class="company_image_logo" width="200" height="auto" />
+					<div class="separator" style="position: relative; float: right;"></div>
+					<span class="sponsor_text"
+						style="position: relative; float: right;">Ogled omogoča:</span>
+
+				</div>
+			</div>
+			<div class="col-lg-1">
+				<p></p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Content -->
+
+	<div class="container-fluid ">
+		<div class="row">
+			<div class="col-lg-12">
+				<p class="welcome-small-text">
+					Dobrodošli na <b>Neodvisen.TV Devel</b>
+				</p>
+				<div class="row">
+					<div class="col-lg-6" style="text-align: center;">
+						<p class="theme-content-text">TEMATSKA VSEBINA ZA KREPITEV
+							DRUŽBENE ODGOVORNOSTI</p>
+						<img class="logo-image" style="width: 40%; margin-top: 10%;"
+							src="../images/logo-2.svg" />
+						<p class="theme-content-subtitle">V SVOJEM SLOGU</p>
+					</div>
+					<div class="col-lg-6 pin-container-screen">
+						<div class="pin-view">
+							<p class="enter-pin-profile-title">VPIŠI KODO ZA
+								VSTOP</p>
+							<div id="pinCodeProfile" class="pin-code-profile">
+								<input id="test" class="pin-number-container" type="text" maxlength="1" focusable />
+								<input type="text" class="pin-number-container" maxlength="1" focusable />
+								<input type="text" class="pin-number-container" maxlength="1" focusable />
+								<input type="text" class="pin-number-container" maxlength="1" focusable />
+								<input type="text" class="pin-number-container" maxlength="1" focusable />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Error box -->
+	
+	<div class="modal fade error-modal modal-xl" id="errorModal" tabindex="-1" role="dialog"
+		aria-labelledby="errorModalLabel" aria-hidden="true">
+		<div class="modal-dialog error-modal-dialog" role="document">
+			<div class="modal-content error-modal-content">
+				<p id="errorMessage" class="error-message"></p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Login success Modal -->
+	<div class="modal fade modal-xl" id="loginSuccessModal" tabindex="-1" role="dialog"
+		aria-labelledby="loginSuccessModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			setInterval(updateGradient,10);
+			document.addEventListener('keydown', function(e) {
+  				console.log("Listening to: ");
+        				switch(e.keyCode){
+        				case 10009:
+        				console.log("Back tapped");
+        				window.location.href = '../profile.html';
+          
+            		break;
+        		default:
+            		console.log('Key code : ' + e.keyCode);
+           		 break;
+        		}
+    		});
+		});
+		
+  		
+    		
+    		
+		var pinContainer = document.querySelector("#pinCodeProfile");
+		console.log('There is ' + pinContainer + ' Pin Container on the page.');
+		
+		function removeAllAttributes() {
+			const allElements = document.querySelectorAll('.pin-number-container');
+			allElements.forEach((element) => {
+  				element.classList.remove('focused');
+  				element.classList.remove('selected');
+  				element.classList.remove("pin-focus");
+			});
+		}
+		
+		function getWholePin() {
+			var wholePin = "";
+			const allElements = document.querySelectorAll('.pin-number-container');
+			allElements.forEach((element) => {
+				wholePin += element.value;
+			})
+			return wholePin;
+		}
+		
+		function uuidv4() {
+  			return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16) );
+		}
+		
+		function loginUser(pinCode) {
+			var formData = {
+				'code': pinCode,
+				'identity': uuidv4
+			}
+		
+			$.ajax({
+         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/user/activate",
+         		type: 'POST',
+         		data: formData,
+         		crossDomain: true,
+         		success: function (loginData) {
+         		var data = JSON.parse(loginData);
+         			if(data.code === 404) {
+         				$("#errorMessage").append("Uporabnik ne obstaja. Prosimo poskusite znova.")
+         				$("#errorModal").modal('show');
+         				
+         				const func = () => {
+  							$('#errorModal').modal('hide');
+						};
+						setTimeout(func, 2 * 1000);
+         			} else {
+         				console.log("UserLoginsuccess" + loginData);
+						localStorage.setItem("profileData", loginData);
+						$('#sponsorLogo').attr('src', data.sponsorimage);
+						window.location.href = '../index.html?view=profile';
+         			}  
+         		},
+        			error: function (data) {
+             		alert('error!' + data);
+         		},
+         		complete: function (xhr, status) {
+ 					console.log("UserLoginComplete");	
+         		}
+    	 		});
+		}		
+
+		pinContainer.addEventListener('keyup', function (event) {
+			removeAllAttributes();
+    			var target = event.srcElement;
+    
+    			var maxLength = parseInt(target.attributes["maxlength"].value, 10);
+    			var myLength = target.value.length;
+
+    			if (myLength >= maxLength) {
+        			var next = target;
+       			if(next.nextElementSibling) {
+        				while (next = next.nextElementSibling) {
+            				if (next == null) break;
+            				if (next.tagName.toLowerCase() == "input") {
+            					next.className += " focused selected pin-focus";
+                				next.focus();
+                				break;
+            				}
+        				}
+        			} else {
+        				removeAllAttributes();
+        				console.log("End entry");
+        				var pin = getWholePin();
+        				console.log("Pin:  " + pin);
+        				loginUser(pin);
+        				console.log("User login");
+        			}
+    			}
+
+    			if (myLength === 0) {
+        			var next = target;
+        			if(next.previousElementSibling) {
+        				while (next = next.previousElementSibling) {
+            				if (next == null) break;
+            				if (next.tagName.toLowerCase() == "input") {
+                				next.focus();
+                				break;
+            				}
+        				}
+        			} else {
+        				removeAllAttributes();
+        				console.log("cancel keyboard");
+        			}
+   		 	}
+		}, false);
+
+		pinContainer.addEventListener('keydown', function (event) {
+    			var target = event.srcElement;
+    			target.value = "";
+		}, false);
+		
+		$.caph.focus.activate(function(nearestFocusableFinderProvider, controllerProvider) {
+	        controllerProvider.onFocused(function(event, originalEvent) {
+	        console.log("On focused!  " + event + " orig event" + originalEvent);
+	       	 	
+	        });
+	   
+	        controllerProvider.onBlurred(function(event, originalEvent) {
+	        console.log("Test");
+	        
+	        });
+	    });	
+	    
+	    // gradient
+	var colors = new Array(
+	  [48,62,103],
+	  [0,0,0],
+	  [88,21,110],
+	  [88,21,110]);
+
+	var step = 0;
+	//color table indices for: 
+	// current color left
+	// next color left
+	// current color right
+	// next color right
+	var colorIndices = [0,1,2,3];
+	
+	//transition speed
+	var gradientSpeed = 0.002;
+	
+	function updateGradient()
+	{
+	  
+	  if ( $===undefined ) return;
+	  
+	var c0_0 = colors[colorIndices[0]];
+	var c0_1 = colors[colorIndices[1]];
+	var c1_0 = colors[colorIndices[2]];
+	var c1_1 = colors[colorIndices[3]];
+	
+	var istep = 1 - step;
+	var r1 = Math.round(istep * c0_0[0] + step * c0_1[0]);
+	var g1 = Math.round(istep * c0_0[1] + step * c0_1[1]);
+	var b1 = Math.round(istep * c0_0[2] + step * c0_1[2]);
+	var color1 = "rgb("+r1+","+g1+","+b1+")";
+	
+	var r2 = Math.round(istep * c1_0[0] + step * c1_1[0]);
+	var g2 = Math.round(istep * c1_0[1] + step * c1_1[1]);
+	var b2 = Math.round(istep * c1_0[2] + step * c1_1[2]);
+	var color2 = "rgb("+r2+","+g2+","+b2+")";
+	
+	 $('#gradient').css({
+	   background: "-webkit-gradient(linear, left top, right top, from("+color1+"), to("+color2+"))"}).css({
+	    background: "-moz-linear-gradient(left, "+color1+" 0%, "+color2+" 100%)"});
+	  
+	  step += gradientSpeed;
+	  if ( step >= 1 )
+	  {
+	    step %= 1;
+	    colorIndices[0] = colorIndices[1];
+	    colorIndices[2] = colorIndices[3];
+	    
+	    //pick two new target color indices
+	    //do not pick the same as the current one
+	    colorIndices[1] = ( colorIndices[1] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+	    colorIndices[3] = ( colorIndices[3] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
+	    
+	  }
+}
+</script>
+</body>
+</html>

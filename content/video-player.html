@@ -1,0 +1,111 @@
+!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="Neodvisen TV" />
+<script src="../js/jquery-3.6.1.min.js"></script>
+<link href="../css/bootstrap.css" rel="stylesheet"></link>
+<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="../js/caph-jquery.min.js"></script>
+<link href="../css/caph.min.css" rel="stylesheet"></link>
+<link href="../css/caph-stripe.min.css" rel="stylesheet"></link>
+<title>Neodvisen TV</title>
+<link href="../css/style.css" rel="stylesheet"></link>
+<link rel="stylesheet" href="../css/swiper-bundle.css"></link>
+<script src="../js/handlebars.min-v4.7.7.js"></script>
+<script src="../js/swiper-bundle.js"></script>
+<link href="../css/mediaelementplayer.min.css" rel="stylesheet">
+<script src="../js/mediaelement.min.js"></script>
+</head>
+<body>
+<a id="navigationLink" href="" />
+    <script type="text/javascript">
+    		var videoObject = JSON.parse(localStorage.getItem("videoObject"));
+    		console.log("video object" + localStorage.getItem("videoObject"));
+       	var objElem = document.createElement('video');
+		objElem.type = 'application/avplayer';
+		objElem.id = 'videoPlayer'
+		objElem.style.width = "100%";
+		objElem.style.height = "100%";
+		objElem.src = videoObject.stream_hls;
+		objElem.poster = videoObject.image_landscape;
+		objElem.controls = "controls";
+		objElem.autoplay = true;
+		objElem.classList.add("mejs__container");
+		objElem.classList.add("focused");
+		objElem.preload = true;
+		//Append the object element to your document
+		document.body.appendChild(objElem);
+		
+		var controlsTimeout;
+		
+		var player = new MediaElementPlayer('videoPlayer', {
+			pluginPath: 'https://cdnjs.com/libraries/mediaelement/',
+			features: ["playpause", "current", "progress", "duration"],
+			success: function(mediaElement, originalNode, instance) {
+				// do things
+				console.log("video loaded");
+			},
+			shimScriptAccess: 'always'
+		});
+		
+		$('video').click();
+		
+		
+		
+		document.addEventListener('keydown', function(e) {
+  		console.log("Listening to: " + e.keyCode);
+        		switch(e.keyCode){
+        		case 10009:
+        			// back to details
+        			console.log("Back tapped");
+        			window.location.href = "video-details.html?dataId=" + videoObject.id + "&part="+ localStorage.getItem("part");
+            	case 13:
+            		// play/pause
+            	    clearTimeout(controlsTimeout);
+            		player.showControls();
+           		if(player.paused == false) {
+            			player.pause();
+            		} else {
+            			player.play();
+            		}
+            		controlsTimeout = setTimeout(hideControls, 3000);
+            		break;
+            	case 37:
+            		// backwards seeking
+            		clearTimeout(controlsTimeout);
+            		player.showControls();
+            		console.log("test " + player.currentTime);
+            		if(player.currentTime - 10 > 0) {
+            			player.setCurrentTime(player.currentTime - 10);
+            		} else {
+            			player.setCurrentTime(-1);
+            		}
+            		player.play();
+            		controlsTimeout = setTimeout(hideControls, 3000);
+            		break;
+            	case 39:
+            		// forward seeking
+            		clearTimeout(controlsTimeout);
+            		player.showControls();
+            		if((player.currentTime + 10) > player.duration) {
+            			player.setCurrentTime(player.duration);
+            		} else {
+            			player.setCurrentTime(player.currentTime + 10);
+            		}
+            		player.play();
+            		controlsTimeout = setTimeout(hideControls, 3000);
+            		break;
+        		default:
+            		console.log('Key code : ' + e.keyCode);
+        		}
+    		});
+		
+		function hideControls() {
+			player.hideControls();
+		}
+    </script>
+</body>
+</html>
