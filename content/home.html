@@ -43,10 +43,12 @@ $(document).ready(function() {
 				
 				console.log("Selected");
 				if($(event.currentTarget).hasClass("swiper-slide-big") == true) {
+					localStorage.removeItem("searchNavigation");
 					$("#detailsHref").attr("href", "content/video-details.html?dataId=" + id + "&part=" + part);
 				} else if($(event.currentTarget).hasClass("swiper-slide-categories") == true) {
 					$("#detailsHref").attr("href", "content/category-details.html?dataId="+id);
 				} else if($(event.currentTarget).hasClass("swiper-slide-small-cell-1") == true) {
+					localStorage.removeItem("searchNavigation");
 					$("#detailsHref").attr("href", "content/video-details.html?dataId=" + id + "&part=" + part);
 				} else if($(event.currentTarget).is(profile)) {
 					window.location.href = 'index.html?view=profile'

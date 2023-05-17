@@ -7,25 +7,29 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
-			<div id="smallIconsSwiper1" class="swiper smallIconsSwiper1">
+			<div id="smallIconsSwiper1" style="position: relative; height: 80%;" class="swiper smallIconsSwiper1">
 				<!-- Additional required wrapper -->
 				<div id="swiper-wrapper-small-icon-1" class="swiper-wrapper-small-icon-1 swiper-wrapper"></div>
 			</div>
 		</div>
 	</div>
+	<a id="detailsHref" ></a>)
 </div>
 
 <script id="smallCell1Template" type="text/x-handlebars-template">
-	<div class='swiper-slide-small-cell-1 swiper-slide' id-data="{{ obj.id }}" part="{{ obj.part }}" focusable>
+	<div class='swiper-slide-small-cell-1 swiper-slide bottom-border' id-data="{{ obj.id }}" part="{{ obj.part }}"  focusable>
 		<img src='{{ obj.image_landscape }}'/> 
 	</div> 
 </script>
 
 <script type="text/javascript"> 
-	 var smallSliderOldIdx = 0
+	 var smallSliderOldIdx = 0;
+	 let swiperSmall;
+	 var searchQueryString = "";
 	 $(document).ready(function() {
 	 
-	 	setupSlider();
+	 	setupSlider(localStorage.getItem("searchQuery"));
+	 	$("#searchInput").val(localStorage.getItem("searchQuery"));
 	 	$.caph.focus.activate(function(nearestFocusableFinderProvider, controllerProvider) {
 	        controllerProvider.onFocused(function(event, originalEvent) {
 	        console.log("On focused!  " + event + " orig event" + originalEvent);
@@ -48,66 +52,96 @@
 	 	    controllerProvider.onSelected(function(event, originalEvent) {
 	 	    
 	 	    	console.log("selected");
+	 	    		if($("#searchInput").hasClass("focused") == true && $("#searchInput").val().length > 0)  {
+	 	    		  if($( document.activeElement ).filter('input,textarea').length == 0) {
+	 	    			document.getElementById('searchInput').focus();
+   				  } else {
+   				  	let searchQuery = $("#searchInput").val();
+	 	    			$("#swiper-wrapper-small-icon-1").empty();
+	 	    			localStorage.setItem("searchQuery", searchQuery);
+	 	    			setupSlider(searchQuery);
+   				  }
+	 	    		} else if($(event.currentTarget).hasClass("swiper-slide-small-cell-1") == true) {
+	 	    			let id = $(event.currentTarget).attr("id-data");
+					let part = $(event.currentTarget).attr("part");
+					localStorage.setItem("searchNavigation", "true");
+					$("#detailsHref").attr("href", "content/video-details.html?dataId=" + id + "&part=" + part);
+					document.getElementById('detailsHref').click();
+				}
 	 	    });
 	 	});
+	 	
+	 	swiperSmall = new Swiper('#smallIconsSwiper1', {
+  		   				// Optional parameters
+  		   				direction: 'vertical',
+  		   				slidesPerView: "auto",
+  		   				observer: true,
+  		   				grid: {
+  		   					rows: 3
+  		   				},
+  		   				spaceBetween: 0,
+					}); 
 	 
 	 });
 	 
 	  function slideSmallSlider() {
 	    var focusedIdx = parseInt($(".swiper-slide-small-cell-1.focused").index());
-		let swipe = document.querySelector('.smallIconsSwiper1').swiper;
 			
 		if (focusedIdx === -1) { 
 			console.log("-1       s  " + focusedIdx);
 			//swipe.slideTo(0);
 		} else if (focusedIdx > smallSliderOldIdx) {
-			console.log("Next focused id " + focusedIdx);
-			swipe.slideTo(focusedIdx);
+			console.log("Next focused id " + (focusedIdx % 3) + "focusedIndex " + focusedIdx);
+			swiperSmall.slideTo((focusedIdx % 3));
 		} else {
-			console.log("Prev id" + focusedIdx);
-			swipe.slideTo(focusedIdx);
+			console.log("Prev id" + (focusedIdx % 3) + "focusedIndex " + focusedIdx);
+			swiperSmall.slideTo((focusedIdx % 3));
 		}
 		smallSliderOldIdx = focusedIdx;
 	  }
 	 
-	 function setupSlider() {
+	 function setupSlider(searchQuery) {
 	 	var itemObject;
-	  	$.ajax({
-         url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/search?query=zadel",
-         type: 'GET',
-         crossDomain: true,
-         success: function (smallSliderData) {
-            	itemObject = smallSliderData;
+	 	if(searchQueryString == searchQuery) {
+	 		// tap to input here
+	 		console.log("Input here");
+	 	} else {
+	  		$.ajax({
+         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/search?query="+searchQuery,
+         		type: 'GET',
+         		crossDomain: true,
+         		success: function (smallSliderData) {
+            			itemObject = smallSliderData;
          	
-            	var source = document.getElementById('smallCell1Template').innerHTML;
-			var template = Handlebars.compile(source);
-            	var listContent = "";
-            	for (let i = 0; i < smallSliderData.length; i++) { 
-            		var obj = smallSliderData[i];
-            		var context = { obj: obj };
-		    	    var html = template(context);
-            		listContent = listContent + html;
-            	}
+            			var source = document.getElementById('smallCell1Template').innerHTML;
+					var template = Handlebars.compile(source);
+            			var listContent = "";
+            			for (let i = 0; i < smallSliderData.length; i++) { 
+            				var obj = smallSliderData[i];
+            				var context = { obj: obj };
+		    	    			var html = template(context);
+            				listContent = listContent + html;
+            			}
         
-            $("#swiper-wrapper-small-icon-1").append(listContent);
-                	
-           const swiperSmall = new Swiper('#smallIconsSwiper1', {
-  		   		// Optional parameters
-  		   		direction: 'vertical',
-  		   		slidesPerView: "auto",
-  		   		grid: {
-  		   			rows: 3
-  		   		},
-  		   		spaceBetween: 20,
-			});
-			swiperSmall.slideTo(0);
-         },
-         error: function (data) {
-             alert('error!' + data);
-         },
-         complete: function (xhr, status) {
-
-         }
-	 	});
+            			$("#swiper-wrapper-small-icon-1").append(listContent);
+            			console.log("Small swiper");
+            			if(smallSliderData.length < 3) {
+            				console.log("swiper small");
+            				$("#smallIconsSwiper1").css("height", "100%");
+            			} else  {
+            				$("#smallIconsSwiper1").css("height", "80%");
+            			}
+            			swiperSmall.update();
+            			swiperSmall.updateSize();
+					swiperSmall.slideTo(0);
+         	},
+         	error: function (data) {
+            		alert('error!' + data);
+         	},
+         	complete: function (xhr, status) {
+         	}
+	 		});
+	 	}
 	 }
+	
 </script>

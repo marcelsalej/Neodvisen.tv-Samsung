@@ -71,11 +71,11 @@
 							<p class="enter-pin-profile-title">VPIŠI KODO ZA
 								VSTOP</p>
 							<div id="pinCodeProfile" class="pin-code-profile">
-								<input id="test" class="pin-number-container" type="text" maxlength="1" focusable />
-								<input type="text" class="pin-number-container" maxlength="1" focusable />
-								<input type="text" class="pin-number-container" maxlength="1" focusable />
-								<input type="text" class="pin-number-container" maxlength="1" focusable />
-								<input type="text" class="pin-number-container" maxlength="1" focusable />
+								<input id="test" class="pin-number-container" inputable="true" type="text" maxlength="1" focusable />
+								<input id="test" type="text" class="pin-number-container" inputable="true" maxlength="1" focusable />
+								<input id="test" type="text" class="pin-number-container" inputable="true" maxlength="1" focusable />
+								<input id="test" type="text" class="pin-number-container" inputable="true" maxlength="1" focusable />
+								<input id="test" type="text" class="pin-number-container" inputable="true" maxlength="1" focusable />
 							</div>
 						</div>
 					</div>
@@ -114,7 +114,7 @@
         				switch(e.keyCode){
         				case 10009:
         				console.log("Back tapped");
-        				window.location.href = '../profile.html';
+        				window.location.href = '../index.html?view=profile';
           
             		break;
         		default:
@@ -237,18 +237,38 @@
 		pinContainer.addEventListener('keydown', function (event) {
     			var target = event.srcElement;
     			target.value = "";
+    			console.log("Keydown");
+    				$("#test").css({
+					border : '3px solid white'
+				});
 		}, false);
 		
 		$.caph.focus.activate(function(nearestFocusableFinderProvider, controllerProvider) {
 	        controllerProvider.onFocused(function(event, originalEvent) {
 	        console.log("On focused!  " + event + " orig event" + originalEvent);
-	       	 	
+	       	 	$(event.currentTarget).css({
+					border: '3px solid red'
+				});
 	        });
 	   
 	        controllerProvider.onBlurred(function(event, originalEvent) {
-	        console.log("Test");
-	        
+	        console.log("blurred");
+	        		$(event.currentTarget).css({
+					border : '3px solid white'
+				});
+				$(event.currentTarget).removeClass("selected");
 	        });
+	        
+	        controllerProvider.onSelected(function(event, originalEvent) {
+	 	    		console.log("Selected ");
+	 	    		$(event.currentTarget).toggleClass("selected");
+	 	    		
+	 	    		if(event.currentTarget.id == "test") {
+	 	    			event.currentTarget.focus();
+	 	    		}
+	 	    		
+	 	    		
+			});
 	    });	
 	    
 	    // gradient

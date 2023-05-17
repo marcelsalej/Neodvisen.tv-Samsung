@@ -55,17 +55,17 @@
 	<div class="container-fluid h-100">
 		<div class="row h-100">
 			<div class="menu h-100" style= "width: 7%;">
-				<div id="home" focusable class="nav-item col-lg-4 menu-item" style="margin-left: 25%">
+				<div id="home" focusable class="nav-item col-lg-4 menu-item" style="padding-left: 10%; padding-right: 10%; width: 80%;">
 					<div class="home">
 						<a href="content/home.html"></a>
 					</div>
 				</div>
-				<div id="search" focusable class="nav-item col-lg-4 menu-item" style="margin-left: 25%">
+				<div id="search" focusable class="nav-item col-lg-4 menu-item" style="padding-left: 10%; padding-right: 10%; width: 80%;">
 					<div class="search">
 						<a href="content/search.html"></a>
 					</div>
 				</div>
-				<div id="profile" focusable class="nav-item col-lg-4 menu-item" style="margin-left: 25%">
+				<div id="profile" focusable class="nav-item col-lg-4 menu-item" style="padding-left: 10%; padding-right: 10%; width: 80%;">
 					<div class="profile">
 						<a href="content/profile.html"></a>
 					</div>
@@ -89,7 +89,7 @@
 		
 		var viewToShow = getUrlParameter("view");
 	
-		console.log("Index ");
+		console.log("Index  viewToShow" + viewToShow);
 		if(viewToShow == "profile") {
 			$("#profile").toggleClass("selected");
 			$("#content").load("content/profile.html");
@@ -182,8 +182,7 @@
 	    background: "-moz-linear-gradient(left, "+color1+" 0%, "+color2+" 100%)"});
 	  
 	  step += gradientSpeed;
-	  if ( step >= 1 )
-	  {
+	  if ( step >= 1 ) {
 	    step %= 1;
 	    colorIndices[0] = colorIndices[1];
 	    colorIndices[2] = colorIndices[3];
@@ -192,7 +191,6 @@
 	    //do not pick the same as the current one
 	    colorIndices[1] = ( colorIndices[1] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
 	    colorIndices[3] = ( colorIndices[3] + Math.floor( 1 + Math.random() * (colors.length - 1))) % colors.length;
-	    
 	  }
 }
 

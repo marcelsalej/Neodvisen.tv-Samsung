@@ -200,6 +200,7 @@
 		var dataId;
 		var streamSecret;
 		var profileData;
+		var searchNavigation;
 		
 		$( document ).ready(function() {
 			setInterval(updateGradient,10);
@@ -215,6 +216,7 @@
 			dataId = getUrlParameter('dataId');
 			part = getUrlParameter('part');
 			categoryId = getUrlParameter('categoryId');
+			searchNavigation = localStorage.getItem('searchNavigation');
 			
 			 $.ajax({
          		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/main?id=" + dataId + "&part=" + part,
@@ -270,7 +272,9 @@
         		switch(e.keyCode){
         		case 10009:
         			console.log("Back tapped");
-        			if(categoryId) {
+        			if(searchNavigation) {
+        				window.location.href = '../index.html?view=search';
+        			} else if(categoryId) {
         				window.location.href = 'category-details.html?dataId='+categoryId;
         			} else {
             			window.location.href = '../index.html';
@@ -354,20 +358,26 @@
 	   
 	        controllerProvider.onBlurred(function(event, originalEvent) {
 	        console.log("Test");
-	        if($(event.currentTarget).attr("id") == "enterButton" || $(event.currentTarget).attr("inputable").length != 0) {
+	        if($(event.currentTarget).id == "enterButton" || $(event.currentTarget).attr("inputable").length != 0) {
 	        		$(event.currentTarget).css({
 					border : '3px solid white'
 				});
 				$(event.currentTarget).removeClass("selected");
 	        } else {
 	        		$(event.currentTarget).css({
-					border : '3px solid transparent'
+					border : '3px solid white'
 				});
 	        }
 	        });
 
 	 	    controllerProvider.onSelected(function(event, originalEvent) {
+	 	    		console.log("Selected ");
 	 	    		$(event.currentTarget).toggleClass("selected");
+	 	    		
+	 	    		if(event.currentTarget.id == "test") {
+	 	    			event.currentTarget.focus();
+	 	    		}
+	 	    		
 	 	    		
 			});
 	    });	
