@@ -103,7 +103,7 @@
 		aria-labelledby="loginSuccessModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-fullscreen" role="document">
 			<div class="modal-content login-success-content">
-				<img class="independent-tv-image" src="" />
+				<img class="independent-tv-image" src="../images/logo-2.svg" />
 				<div class="login-success-divider"></div>
 				<div class="text-tv-container">
 					<p class="login-success-description">TEMATSKE VIDEO VSEBINE ZA KREPITEV DRUŽBENE ODGOVORNOSTI</p>
@@ -127,7 +127,7 @@
 			console.log("Video get click");
 			var videoObject;
 			$.ajax({
-         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/stream?id="+dataId+"&part="+part+"&stream_secret="+streamSecret+"&app=true",
+         		url: "https://www.neodvisen.tv/api/v1/video/stream?id="+dataId+"&part="+part+"&stream_secret="+streamSecret+"&app=true",
          		type: 'GET', 
          		crossDomain: true,
          		success: function (data) {
@@ -151,7 +151,7 @@
 		function checkUserActivation() {
 		console.log("Evaluating credentials" + profileData.sponsor);
 			$.ajax({
-         		url: 'http://devel.ekosplet.si/neodvisentv/api/v1/user/check?id='+dataId+'&part='+part+'&code='+profileData.pass+'&identity='+profileData.identity,
+         		url: 'https://www.neodvisen.tv/api/v1/user/check?id='+dataId+'&part='+part+'&code='+profileData.pass+'&identity='+profileData.identity,
          		type: 'GET', 
          		crossDomain: true,
          		success: function (data) {
@@ -219,7 +219,7 @@
 			searchNavigation = localStorage.getItem('searchNavigation');
 			
 			 $.ajax({
-         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/main?id=" + dataId + "&part=" + part,
+         		url: "https://www.neodvisen.tv/api/v1/video/main?id=" + dataId + "&part=" + part,
          		type: 'GET', 
          		crossDomain: true,
          		success: function (data) {
@@ -428,7 +428,7 @@
 			}
 		
 			$.ajax({
-         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/user/activate",
+         		url: "https://www.neodvisen.tv/api/v1/user/activate",
          		type: 'POST',
          		data: formData,
          		crossDomain: true,
@@ -468,7 +468,7 @@
 			}
 		
 			$.ajax({
-         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/user/login",
+         		url: "https://www.neodvisen.tv/api/v1/user/login",
          		type: 'POST',
          		data: formData,
          		crossDomain: true,

@@ -128,7 +128,7 @@
 			let dataId = getUrlParameter('dataId');
 			categoryId = dataId;
 			 $.ajax({
-         		url: "http://devel.ekosplet.si/neodvisentv/api/v1/video/list?id=" + dataId,
+         		url: "https://www.neodvisen.tv/api/v1/video/list?id=" + dataId,
          		type: 'GET', 
          		crossDomain: true,
          		success: function (data) {
